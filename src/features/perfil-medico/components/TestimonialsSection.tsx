@@ -53,10 +53,10 @@ export const TestimonialsSection: React.FC = () => {
   }, []);
 
   return (
-    <section id="testimonios" className="py-24 bg-slate-100/70 dark:bg-slate-900/40 relative transition-colors duration-300">
+    <section id="testimonios" className="py-14 bg-slate-100/70 dark:bg-slate-900/40 relative transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10">
           <h2 className="text-xs font-semibold text-medical-600 dark:text-medical-400 tracking-widest uppercase mb-3">Experiencias Verificadas</h2>
           <h3 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight transition-colors">
             Lo Que Dicen Nuestros Pacientes

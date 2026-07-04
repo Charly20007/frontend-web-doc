@@ -1,3 +1,5 @@
+@import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource-variable/outfit";
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -20,12 +22,22 @@
   --color-navy-800: #132842;
   --color-navy-900: #0a192f;
   --color-navy-950: #050d1a;
+
+  /* Tipografía Moderna Médica (Plus Jakarta Sans para cuerpo, Outfit para titulares) */
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", "Outfit Variable", "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit Variable", "Outfit", "Plus Jakarta Sans Variable", "Plus Jakarta Sans", sans-serif;
 }
 
 body {
-  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
 }
 
 /* Efectos de cristal (Glassmorphism) - Modo Claro */

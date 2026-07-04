@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { X, Calendar, User, Mail, Phone, CheckCircle2, AlertCircle } from 'lucide-react';
-import type { ServicioMedico } from './ServicesSection';
+import type { ServicioMedico } from '../../catalogo-servicios/types';
 
 interface AppointmentModalProps {
   isOpen: boolean;

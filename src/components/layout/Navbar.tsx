@@ -1,5 +1,6 @@
 import React from 'react';
-import { Calendar, Phone, ShieldCheck, Sun, Moon } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Calendar, Phone, ShieldCheck, Sun, Moon, BookOpen } from 'lucide-react';
 
 interface NavbarProps {
   onOpenBooking: () => void;
@@ -8,11 +9,14 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, darkMode, onToggleTheme }) => {
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
   return (
     <header className="sticky top-0 z-50 w-full glass-panel border-b border-slate-200/80 dark:border-white/10 transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        <div className="flex items-center space-x-3.5 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-          <div className="w-12 h-12 rounded-2xl bg-white dark:bg-navy-900 border border-slate-200 dark:border-white/10 flex items-center justify-center p-1 shadow-md overflow-hidden shrink-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <Link to="/" className="flex items-center space-x-3 cursor-pointer" onClick={() => isHome && window.scrollTo({ top: 0, behavior: 'smooth' })}>
+          <div className="w-10 h-10 rounded-xl bg-white dark:bg-navy-900 border border-slate-200 dark:border-white/10 flex items-center justify-center p-1 shadow-md overflow-hidden shrink-0">
             <img 
               src="/WhatsApp Image 2026-07-02 at 12.36.06 PM (1).jpeg" 
               alt="Logo Dr. Juan Carlos Marcos Enriquez" 
@@ -20,20 +24,30 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, darkMode, onToggl
             />
           </div>
           <div>
-            <span className="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white block transition-colors leading-tight">
-              Dr. Juan Carlos Marcos Enriquez
+            <span className="font-bold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white block transition-colors leading-tight">
+              Dr. Juan Marcos
             </span>
-            <span className="text-[11px] text-medical-600 dark:text-medical-400 font-bold tracking-wide uppercase flex items-center gap-1 mt-0.5">
-              <ShieldCheck className="w-3.5 h-3.5 shrink-0" /> Cirugía General y del Aparato Digestivo
+            <span className="text-[10px] sm:text-xs text-medical-600 dark:text-medical-400 font-semibold tracking-wider uppercase flex items-center gap-1 mt-0.5">
+              <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-medical-500" /> Cirugía General y Digestiva
             </span>
           </div>
-        </div>
+        </Link>
 
         <nav className="hidden lg:flex items-center space-x-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
-          <a href="#servicios" className="hover:text-medical-600 dark:hover:text-medical-400 transition-colors">Procedimientos</a>
-          <a href="#perfil" className="hover:text-medical-600 dark:hover:text-medical-400 transition-colors">Especialista</a>
-          <a href="#testimonios" className="hover:text-medical-600 dark:hover:text-medical-400 transition-colors">Testimonios</a>
-          <a href="#contacto" className="hover:text-medical-600 dark:hover:text-medical-400 transition-colors">Consultorio</a>
+          <a href={isHome ? "#servicios" : "/#servicios"} className="hover:text-medical-600 dark:hover:text-medical-400 transition-colors">Procedimientos</a>
+          <a href={isHome ? "#perfil" : "/#perfil"} className="hover:text-medical-600 dark:hover:text-medical-400 transition-colors">Especialista</a>
+          <a href={isHome ? "#testimonios" : "/#testimonios"} className="hover:text-medical-600 dark:hover:text-medical-400 transition-colors">Testimonios</a>
+          <Link 
+            to="/blog" 
+            className={`flex items-center space-x-1.5 px-3 py-1 rounded-xl transition-all font-bold ${
+              location.pathname.startsWith('/blog')
+                ? 'bg-medical-500/10 text-medical-600 dark:text-medical-400 border border-medical-500/20'
+                : 'hover:text-medical-600 dark:hover:text-medical-400'
+            }`}
+          >
+            <BookOpen className="w-4 h-4 text-medical-500" />
+            <span>Blog Médico</span>
+          </Link>
         </nav>
 
         <div className="flex items-center space-x-3 sm:space-x-4">

@@ -18,7 +18,7 @@ export const SectionTitle: React.FC<SectionTitleProps> = ({
   centered = true,
 }) => {
   return (
-    <div className={`max-w-3xl mb-16 ${centered ? 'mx-auto text-center' : 'text-left'}`}>
+    <div className={`max-w-3xl mb-10 ${centered ? 'mx-auto text-center' : 'text-left'}`}>
       {badge && (
         <div className="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-medical-500/10 border border-medical-500/20 text-medical-600 dark:text-medical-400 text-xs font-semibold uppercase tracking-wider mb-3">
           {badgeIcon && <span className="shrink-0">{badgeIcon}</span>}

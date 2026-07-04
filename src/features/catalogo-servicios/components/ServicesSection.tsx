@@ -2,18 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Activity, Shield, Scissors, Stethoscope, Clock, ArrowRight, Check } from 'lucide-react';
 
-export interface ServicioMedico {
-  id: number;
-  nombre: string;
-  slug: string;
-  resumen: string;
-  descripcionDetallada?: string;
-  tiempoEstimadoMinutos: number;
-  precioReferencial?: number;
-  icono?: string;
-  especialidadNombre: string;
-  destacadoEnWeb: boolean;
-}
+import type { ServicioMedico } from '../types';
+export type { ServicioMedico };
 
 interface ServicesSectionProps {
   onSelectService: (service: ServicioMedico) => void;
@@ -107,11 +97,11 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
   };
 
   return (
-    <section id="servicios" className="py-24 bg-slate-100/70 dark:bg-slate-900/40 relative transition-colors duration-300">
+    <section id="servicios" className="py-14 bg-slate-100/70 dark:bg-slate-900/40 relative transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Encabezado de la sección */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-10">
           <h2 className="text-xs font-semibold text-medical-600 dark:text-medical-400 tracking-widest uppercase mb-3">Especialidades & Procedimientos</h2>
           <h3 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight transition-colors">
             Intervenciones Quirúrgicas de Vanguardia

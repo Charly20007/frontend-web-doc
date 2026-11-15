@@ -1,57 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Clock, Calendar, ShieldCheck, ArrowRight, BookOpen } from 'lucide-react';
-import { getArticuloBySlug } from '../services/blogService';
+'use client';
+
+import React from 'react';
+import Link from 'next/link';
+import { ArrowLeft, Clock, Calendar, ShieldCheck, ArrowRight } from 'lucide-react';
 import type { ArticuloMedico } from '../types';
 
 interface ArticleDetailProps {
+  articulo: ArticuloMedico;
   onOpenBooking: () => void;
 }
 
-export const ArticleDetail: React.FC<ArticleDetailProps> = ({ onOpenBooking }) => {
-  const { slug } = useParams<{ slug: string }>();
-  const [articulo, setArticulo] = useState<ArticuloMedico | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const cargar = async () => {
-      if (!slug) return;
-      setLoading(true);
-      const data = await getArticuloBySlug(slug);
-      setArticulo(data);
-      setLoading(false);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-    cargar();
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen py-20 bg-slate-50 dark:bg-navy-950 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-medical-500" />
-      </div>
-    );
-  }
-
-  if (!articulo) {
-    return (
-      <div className="min-h-screen py-20 bg-slate-50 dark:bg-navy-950 flex flex-col items-center justify-center text-center px-4">
-        <BookOpen className="w-16 h-16 text-slate-400 mb-4" />
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Artículo no encontrado</h2>
-        <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-md">
-          Es posible que el artículo haya sido removido, reubicado o el enlace sea incorrecto.
-        </p>
-        <Link 
-          to="/blog" 
-          className="bg-medical-500 hover:bg-medical-600 text-white font-bold px-6 py-3 rounded-xl transition-all flex items-center space-x-2"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Volver al Blog Quirúrgico</span>
-        </Link>
-      </div>
-    );
-  }
-
+export const ArticleDetail: React.FC<ArticleDetailProps> = ({ articulo, onOpenBooking }) => {
   return (
     <div className="min-h-screen py-10 sm:py-16 bg-slate-50 dark:bg-navy-950 transition-colors duration-300">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -59,7 +18,7 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({ onOpenBooking }) =
         {/* Botón Volver */}
         <div className="mb-8">
           <Link 
-            to="/blog"
+            href="/blog"
             className="inline-flex items-center space-x-2 text-sm font-bold text-slate-600 dark:text-slate-400 hover:text-medical-600 dark:hover:text-medical-400 transition-colors group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -139,7 +98,7 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({ onOpenBooking }) =
             <div className="md:col-span-4 flex flex-col items-center md:items-end justify-center">
               <button
                 onClick={onOpenBooking}
-                className="w-full sm:w-auto bg-gradient-to-r from-medical-500 to-blue-600 hover:from-medical-600 hover:to-blue-700 text-white font-bold px-6 py-4 rounded-2xl shadow-xl shadow-medical-500/30 hover:shadow-medical-500/50 transition-all flex items-center justify-center space-x-2 text-base group"
+                className="w-full sm:w-auto bg-gradient-to-r from-medical-500 to-blue-600 hover:from-medical-600 hover:to-blue-700 text-white font-bold px-6 py-4 rounded-2xl shadow-xl shadow-medical-500/30 hover:shadow-medical-500/50 transition-all flex items-center justify-center space-x-2 text-base group cursor-pointer"
               >
                 <span>Agendar Cita Ahora</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

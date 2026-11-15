@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import axios from 'axios';
 import { X, Calendar, User, Mail, Phone, CheckCircle2, AlertCircle } from 'lucide-react';

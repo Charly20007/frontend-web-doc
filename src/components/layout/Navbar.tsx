@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Calendar, Phone, ShieldCheck, Sun, Moon, BookOpen } from 'lucide-react';
 
 interface NavbarProps {
@@ -9,13 +12,17 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, darkMode, onToggleTheme }) => {
-  const location = useLocation();
-  const isHome = location.pathname === '/';
+  const pathname = usePathname();
+  const isHome = pathname === '/';
 
   return (
     <header className="sticky top-0 z-50 w-full glass-panel border-b border-slate-200/80 dark:border-white/10 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center space-x-3 cursor-pointer" onClick={() => isHome && window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        <Link 
+          href="/" 
+          className="flex items-center space-x-3 cursor-pointer" 
+          onClick={() => isHome && window.scrollTo({ top: 0, behavior: 'smooth' })}
+        >
           <div className="w-10 h-10 rounded-xl bg-white dark:bg-navy-900 border border-slate-200 dark:border-white/10 flex items-center justify-center p-1 shadow-md overflow-hidden shrink-0">
             <img 
               src="/WhatsApp Image 2026-07-02 at 12.36.06 PM (1).jpeg" 
@@ -38,9 +45,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, darkMode, onToggl
           <a href={isHome ? "#perfil" : "/#perfil"} className="hover:text-medical-600 dark:hover:text-medical-400 transition-colors">Especialista</a>
           <a href={isHome ? "#testimonios" : "/#testimonios"} className="hover:text-medical-600 dark:hover:text-medical-400 transition-colors">Testimonios</a>
           <Link 
-            to="/blog" 
+            href="/blog" 
             className={`flex items-center space-x-1.5 px-3 py-1 rounded-xl transition-all font-bold ${
-              location.pathname.startsWith('/blog')
+              pathname?.startsWith('/blog')
                 ? 'bg-medical-500/10 text-medical-600 dark:text-medical-400 border border-medical-500/20'
                 : 'hover:text-medical-600 dark:hover:text-medical-400'
             }`}
@@ -74,7 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, darkMode, onToggl
 
           <button
             onClick={onOpenBooking}
-            className="bg-gradient-to-r from-medical-500 to-blue-600 hover:from-medical-600 hover:to-blue-700 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-medical-500/25 hover:shadow-medical-500/40 transition-all duration-300 flex items-center space-x-2 text-sm"
+            className="bg-gradient-to-r from-medical-500 to-blue-600 hover:from-medical-600 hover:to-blue-700 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-medical-500/25 hover:shadow-medical-500/40 transition-all duration-300 flex items-center space-x-2 text-sm cursor-pointer"
           >
             <Calendar className="w-4 h-4" />
             <span>Agendar Cita</span>

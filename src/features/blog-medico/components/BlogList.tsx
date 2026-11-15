@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState, useMemo } from 'react';
 import { Search, BookOpen, Sparkles, Filter } from 'lucide-react';
 import { SectionTitle } from '../../../components/ui/SectionTitle';

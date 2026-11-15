@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { Clock, ArrowRight, BookOpen } from 'lucide-react';
 import type { ArticuloMedico } from '../types';
 
@@ -39,7 +39,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ articulo }) => {
           </div>
 
           <h3 className="text-xl font-extrabold text-slate-900 dark:text-white group-hover:text-medical-600 dark:group-hover:text-medical-400 transition-colors leading-snug mb-3">
-            <Link to={`/blog/${articulo.slug}`}>
+            <Link href={`/blog/${articulo.slug}`}>
               {articulo.titulo}
             </Link>
           </h3>
@@ -52,7 +52,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ articulo }) => {
 
       <div className="px-6 sm:px-7 pb-6 pt-2 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
         <Link 
-          to={`/blog/${articulo.slug}`}
+          href={`/blog/${articulo.slug}`}
           className="inline-flex items-center space-x-2 text-sm font-bold text-medical-600 dark:text-medical-400 group-hover:text-medical-500 transition-colors"
         >
           <span>Leer artículo completo</span>

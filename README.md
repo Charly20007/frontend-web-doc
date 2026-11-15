@@ -1,32 +1,59 @@
-# React + TypeScript + Vite
+# Frontend Web - Portal Médico & Blog Quirúrgico
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Portal médico para el **Dr. Juan Carlos Marcos Enriquez**, especialista en Cirugía General y del Aparato Digestivo por Mínima Invasión.
 
-Currently, two official plugins are available:
+Migrado a **Next.js (App Router)** para máxima optimización en posicionamiento orgánico (**SEO**), generación estática (**SSG**), metadatos dinámicos por artículo y datos estructurados (**Schema.org**).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🚀 Tecnologías Principales
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Framework:** Next.js (App Router) + React 19
+* **Estilos:** Tailwind CSS v4 con variables semánticas médicas y glassmorphism
+* **Iconografía:** Lucide React
+* **Tipografías:** Plus Jakarta Sans & Outfit (Fontsource Variable)
+* **SEO y Metadatos:** Next.js Metadata API, Open Graph, Twitter Cards, robots.ts y sitemap.ts
+* **Datos estructurados:** Schema.org (`Physician`, `MedicalWebPage`, `MedicalCondition`)
 
-## Expanding the Oxlint configuration
+---
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## 📁 Arquitectura del Proyecto
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```
+src/
+├── app/
+│   ├── blog/
+│   │   ├── [slug]/
+│   │   │   └── page.tsx      # Vista editorial SSG con generateStaticParams y generateMetadata
+│   │   └── page.tsx          # Catálogo general de artículos médicos
+│   ├── globals.css           # Tailwind v4, modo oscuro y temas
+│   ├── layout.tsx            # RootLayout con metadatos globales y AppShell
+│   ├── page.tsx              # Landing page principal con Schema.org Physician
+│   ├── robots.ts             # Directivas robots.txt para Googlebot
+│   └── sitemap.ts            # Generador dinámico de sitemap.xml
+├── components/
+│   ├── feedback/             # LoadingFallback, estados de carga
+│   ├── layout/               # Navbar, Footer
+│   ├── providers/            # AppShell (manejo de modo oscuro y modal de citas)
+│   └── ui/                   # Badge, GlassCard, SectionTitle
+└── features/
+    ├── blog-medico/          # Artículos, tarjetas, servicios y tipos
+    ├── catalogo-servicios/   # Procedimientos quirúrgicos y fichas
+    ├── citas/                # Modal de agendamiento
+    └── perfil-medico/        # HeroSection, Perfil, Testimonios
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+---
+
+## 🛠️ Comandos Disponibles
+
+```bash
+# Servidor de desarrollo
+npm run dev
+
+# Compilación de producción con generación estática (SSG)
+npm run build
+
+# Servidor de producción
+npm run start
+```

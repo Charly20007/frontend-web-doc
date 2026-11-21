@@ -35,6 +35,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
   const [fechaDeseada, setFechaDeseada] = useState('');
   const [horaDeseada, setHoraDeseada] = useState('10:00');
   const [motivo, setMotivo] = useState('');
+  const [aceptaPrivacidad, setAceptaPrivacidad] = useState(false);
 
   // Preselecciona el procedimiento desde el que se abrió el modal
   useEffect(() => {
@@ -81,6 +82,7 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
     setTelefono('');
     setCorreo('');
     setMotivo('');
+    setAceptaPrivacidad(false);
     onClose();
   };
 
@@ -275,6 +277,21 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
                   className="w-full bg-slate-50 dark:bg-navy-950 border border-slate-300 dark:border-white/10 rounded-xl p-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-medical-500"
                 />
               </div>
+
+              {/* Consentimiento para el tratamiento de datos (Ley N.° 29733) */}
+              <label className="flex items-start gap-3 text-sm text-slate-600 cursor-pointer">
+                <input
+                  type="checkbox"
+                  required
+                  checked={aceptaPrivacidad}
+                  onChange={(e) => setAceptaPrivacidad(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 accent-medical-600 shrink-0"
+                />
+                <span>
+                  Acepto que mis datos se usen para gestionar mi cita, según la{' '}
+                  <a href="/privacidad" target="_blank" rel="noopener" className="font-semibold text-medical-700 underline">política de privacidad</a>.
+                </span>
+              </label>
 
               {/* Botones */}
               <div className="flex items-center justify-end space-x-3 pt-4 border-t border-slate-200 dark:border-white/10">

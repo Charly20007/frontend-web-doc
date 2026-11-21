@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { ShieldCheck } from 'lucide-react';
 import type { ConfiguracionSitio } from '../../../lib/cms-tipos';
+import { fotoDoctor } from '../../../config/site';
 import { BookingButton } from '../../../components/ui/BookingButton';
 import { BotonWhatsapp } from '../../../components/ui/BotonWhatsapp';
 
@@ -47,7 +48,7 @@ export const HeroInicio: React.FC<{ config: ConfiguracionSitio }> = ({ config })
           <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-[2rem] bg-medical-600/90" aria-hidden="true" />
           <div className="relative rounded-[2rem] overflow-hidden border-4 border-white shadow-2xl shadow-navy-900/20 bg-slate-100">
             <Image
-              src="/imagenes/dr-juan-carlos-marcos-cirujano.jpg"
+              src={fotoDoctor(config)}
               alt={`${config.nombreDoctor}, cirujano general, en sala de operaciones`}
               width={840}
               height={620}

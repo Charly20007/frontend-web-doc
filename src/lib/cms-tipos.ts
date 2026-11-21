@@ -42,7 +42,22 @@ export interface ConfiguracionSitio {
   imagenOgPorDefectoUrl?: string | null;
   googleSiteVerification?: string | null;
   googleAnalyticsId?: string | null;
+  descripcionPie?: string | null;
+  mostrarEmergencias: boolean;
+  textoEmergencias?: string | null;
   horarios: Horario[];
+}
+
+export interface PaginaLegalResumen {
+  clave: string;
+  ruta: string;
+  titulo: string;
+  fechaModificacion: string;
+}
+
+export interface PaginaLegal extends PaginaLegalResumen {
+  contenidoHtml: string;
+  seo: Seo;
 }
 
 export interface ContenidoItem {

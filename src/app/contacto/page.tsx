@@ -83,10 +83,12 @@ export default async function ContactoPage() {
                     </div>
                   ))}
                 </dl>
-                <p className="mt-4 flex items-start gap-2 text-sm text-red-700 dark:text-red-300">
-                  <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                  Emergencias quirúrgicas las 24 horas: llama al {formatearTelefono(config.telefonoPrincipal)}.
-                </p>
+                {config.mostrarEmergencias && config.textoEmergencias && (
+                  <p className="mt-4 flex items-start gap-2 text-sm text-red-700">
+                    <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                    <span>{config.textoEmergencias}{config.telefonoPrincipal && <>. Llama al {formatearTelefono(config.telefonoPrincipal)}.</>}</span>
+                  </p>
+                )}
               </div>
 
               <BookingButton>Agendar cita en línea</BookingButton>

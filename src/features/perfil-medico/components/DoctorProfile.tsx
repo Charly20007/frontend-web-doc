@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { BadgeCheck, CheckCircle2, HeartHandshake, Stethoscope } from 'lucide-react';
 import type { ConfiguracionSitio } from '../../../lib/cms-tipos';
+import { fotoDoctor } from '../../../config/site';
 
 const ENFOQUE = [
   { titulo: 'Diagnóstico claro', texto: 'Revisamos tus síntomas y exámenes y te explicamos tu caso con palabras sencillas, junto con todas las alternativas.' },
@@ -17,7 +18,7 @@ export const DoctorProfile: React.FC<{ config: ConfiguracionSitio }> = ({ config
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
         <div className="lg:col-span-5">
           <Image
-            src="/imagenes/dr-juan-carlos-marcos-cirujano.jpg"
+            src={fotoDoctor(config)}
             alt={`${config.nombreDoctor} en sala de operaciones`}
             width={840}
             height={620}

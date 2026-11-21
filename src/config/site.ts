@@ -6,6 +6,10 @@ import type { ConfiguracionSitio, Seo } from '../lib/cms-tipos';
  * (Datos del consultorio) y llegan desde la API con getConfiguracion().
  */
 
+/** Foto principal del doctor (portada y perfil), editable en el CMS. */
+export const FOTO_DOCTOR_RESPALDO = '/imagenes/dr-juan-carlos-marcos-cirujano.jpg';
+export const fotoDoctor = (c: ConfiguracionSitio) => c.fotoDoctorUrl || FOTO_DOCTOR_RESPALDO;
+
 export const nombreMarca = (c: ConfiguracionSitio) => c.nombreCorto || c.nombreDoctor;
 
 export const direccionCompleta = (c: ConfiguracionSitio) =>

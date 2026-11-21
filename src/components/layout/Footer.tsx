@@ -2,12 +2,12 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Stethoscope, MapPin, Phone, Mail, Clock, MessageCircle } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, MessageCircle } from 'lucide-react';
 import { formatearTelefono, numeroWhatsapp, agruparHorarios, direccionCompleta, telHref, whatsappHref } from '../../config/site';
 import { useSitio } from '../providers/SitioContext';
 
 export const Footer: React.FC = () => {
-  const { config, servicios } = useSitio();
+  const { config, servicios, legales } = useSitio();
   const redes = [
     { url: config.facebookUrl, nombre: 'Facebook' },
     { url: config.instagramUrl, nombre: 'Instagram' },
@@ -24,11 +24,10 @@ export const Footer: React.FC = () => {
           {/* Columna 1: Bio y Marca */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-medical-500 to-blue-700 flex items-center justify-center shadow-lg shadow-medical-500/20">
-                <Stethoscope className="w-5 h-5 text-white" />
-              </div>
+              <img src="/imagenes/logo-dr-juan-carlos-marcos.jpg" alt="" width={44} height={44} className="w-11 h-11 rounded-full bg-white object-contain shrink-0" />
               <Link href="/dr-juan-carlos-marcos" className="font-bold text-white text-base hover:text-medical-400">{config.nombreDoctor}</Link>
             </div>
+            {config.descripcionPie && <p className="text-sm text-slate-300 leading-relaxed">{config.descripcionPie}</p>}
             <p className="text-xs text-slate-400 leading-relaxed">
               {config.especialidad ?? 'Especialista en Cirugía General y del Aparato Digestivo.'}
               {config.cmp && <> CMP {config.cmp}{config.rne && <> · RNE {config.rne}</>}.</>}
@@ -86,10 +85,9 @@ export const Footer: React.FC = () => {
                   <span className="text-white font-medium text-right">{h.horas}</span>
                 </div>
               ))}
-              <div className="flex items-center justify-between py-1">
-                <span className="text-red-400 font-medium">Emergencias Quirúrgicas</span>
-                <span className="text-white font-bold">24 / 7</span>
-              </div>
+              {config.mostrarEmergencias && config.textoEmergencias && (
+                <p className="pt-2 text-red-300 font-semibold">{config.textoEmergencias}</p>
+              )}
             </div>
           </div>
 
@@ -109,11 +107,15 @@ export const Footer: React.FC = () => {
 
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
           <p>© {new Date().getFullYear()} {config.nombreDoctor}. Todos los derechos reservados.</p>
-          <div className="flex space-x-6 mt-4 sm:mt-0">
-            <span className="hover:text-slate-400 cursor-pointer">Privacidad de Datos Médicos</span>
-            <span className="hover:text-slate-400 cursor-pointer">Términos de Servicio</span>
-            <span className="hover:text-slate-400 cursor-pointer">Aviso de Consentimiento Informado</span>
-          </div>
+          {legales.length > 0 && (
+            <nav aria-label="Enlaces legales">
+              <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2 mt-4 sm:mt-0">
+                {legales.map((l) => (
+                  <li key={l.clave}><Link href={l.ruta} className="hover:text-slate-300">{l.titulo.split(' y ')[0]}</Link></li>
+                ))}
+              </ul>
+            </nav>
+          )}
         </div>
       </div>
     </footer>

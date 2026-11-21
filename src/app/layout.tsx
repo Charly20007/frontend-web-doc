@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import './globals.css';
 import { AppShell } from '../components/providers/AppShell';
-import { getConfiguracion, getServicios } from '../lib/cms';
+import { getConfiguracion, getPaginasLegales, getServicios } from '../lib/cms';
 import { nombreMarca, urlAbsoluta } from '../config/site';
 
 export const viewport: Viewport = {
@@ -49,13 +49,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [config, servicios] = await Promise.all([getConfiguracion(), getServicios()]);
+  const [config, servicios, legales] = await Promise.all([getConfiguracion(), getServicios(), getPaginasLegales()]);
   const ga = config.googleAnalyticsId;
 
   return (
     <html lang="es" suppressHydrationWarning>
       <body>
-        <AppShell config={config} servicios={servicios}>
+        <AppShell config={config} servicios={servicios} legales={legales}>
           {children}
         </AppShell>
         {ga && /^G-[A-Z0-9]+$/.test(ga) && (

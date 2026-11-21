@@ -1,5 +1,5 @@
 import { API_URL } from '../config/api';
-import type { ConfiguracionSitio, PaginaSeo, Redireccion, Servicio, ServicioDetalle, Testimonio } from './cms-tipos';
+import type { ConfiguracionSitio, PaginaLegal, PaginaLegalResumen, PaginaSeo, Redireccion, Servicio, ServicioDetalle, Testimonio } from './cms-tipos';
 import type { ArticuloMedico } from '../features/blog-medico/types';
 
 /**
@@ -33,6 +33,10 @@ export const getTestimonios = async (servicioSlug?: string) =>
 export const getPaginaSeo = (clave: string) => apiGet<PaginaSeo>(`/api/seo/paginas/${clave}`);
 
 export const getPaginasSeo = async () => (await apiGet<PaginaSeo[]>('/api/seo/paginas')) ?? [];
+
+export const getPaginasLegales = async () => (await apiGet<PaginaLegalResumen[]>('/api/paginas-legales')) ?? [];
+
+export const getPaginaLegal = (clave: string) => apiGet<PaginaLegal>(`/api/paginas-legales/${clave}`);
 
 export const getRedirecciones = async () => (await apiGet<Redireccion[]>('/api/seo/redirecciones')) ?? [];
 

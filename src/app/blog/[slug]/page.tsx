@@ -1,108 +1,65 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getArticuloBySlug, getArticulosBlog } from '../../../features/blog-medico/services/blogService';
 import { ArticleDetailClient } from '../../../features/blog-medico/components/ArticleDetailClient';
+import { construirMetadata, urlAbsoluta } from '../../../config/site';
+import { getArticulo, getArticulos, getConfiguracion } from '../../../lib/cms';
+import { redirigirSiCorresponde } from '../../../lib/redirecciones';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+// Los artículos nuevos publicados desde el CMS se generan bajo demanda
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
-  const articulos = await getArticulosBlog();
-  return articulos.map((art) => ({
-    slug: art.slug,
-  }));
+  return (await getArticulos()).map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const articulo = await getArticuloBySlug(slug);
+  const [config, articulo] = await Promise.all([getConfiguracion(), getArticulo(slug)]);
+  if (!articulo) return { title: 'Artículo no encontrado', robots: { index: false } };
 
-  if (!articulo) {
-    return {
-      title: 'Artículo no encontrado',
-    };
-  }
-
-  const url = `https://cirujanogeneral.pe/blog/${articulo.slug}`;
-  const ogImage = articulo.imagenPortadaUrl 
-    ? (articulo.imagenPortadaUrl.startsWith('http') ? articulo.imagenPortadaUrl : `https://cirujanogeneral.pe${articulo.imagenPortadaUrl}`)
-    : 'https://cirujanogeneral.pe/WhatsApp Image 2026-07-02 at 12.36.06 PM (2).jpeg';
-
-  return {
-    title: articulo.titulo,
-    description: articulo.resumen,
-    alternates: {
-      canonical: url,
-    },
-    openGraph: {
-      title: articulo.titulo,
-      description: articulo.resumen,
-      url,
-      type: 'article',
-      publishedTime: articulo.fechaPublicacion,
-      authors: [articulo.autor],
-      images: [
-        {
-          url: ogImage,
-          alt: articulo.titulo,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: articulo.titulo,
-      description: articulo.resumen,
-      images: [ogImage],
-    },
-  };
+  return construirMetadata({
+    config,
+    ruta: `/blog/${articulo.slug}`,
+    seo: { ...articulo.seo, imagenOgUrl: articulo.seo.imagenOgUrl || articulo.imagenPortadaUrl },
+    tituloRespaldo: articulo.titulo,
+    descripcionRespaldo: articulo.resumen,
+    tipo: 'article',
+    extraOpenGraph: { publishedTime: articulo.fechaPublicacion, modifiedTime: articulo.fechaModificacion, authors: [articulo.autor] },
+  });
 }
 
 export default async function ArticlePage({ params }: PageProps) {
   const { slug } = await params;
-  const articulo = await getArticuloBySlug(slug);
-
+  const [config, articulo] = await Promise.all([getConfiguracion(), getArticulo(slug)]);
   if (!articulo) {
+    await redirigirSiCorresponde(`/blog/${slug}`);
     notFound();
   }
 
+  const url = `${config.siteUrl}/blog/${articulo.slug}`;
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'MedicalWebPage',
     headline: articulo.titulo,
-    description: articulo.resumen,
-    author: {
-      '@type': 'Physician',
-      name: articulo.autor,
-      url: 'https://cirujanogeneral.pe',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Dr. Juan Carlos Marcos Enriquez',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://cirujanogeneral.pe/favicon.svg',
-      },
-    },
+    description: articulo.seo.metaDescripcion || articulo.resumen,
+    image: urlAbsoluta(config, articulo.imagenPortadaUrl),
+    author: { '@type': 'Physician', '@id': `${config.siteUrl}/#physician`, name: articulo.autor, url: `${config.siteUrl}/dr-juan-carlos-marcos` },
+    publisher: { '@type': 'Organization', name: config.nombreDoctor, logo: { '@type': 'ImageObject', url: `${config.siteUrl}/favicon.svg` } },
     datePublished: articulo.fechaPublicacion,
-    mainEntityOfPage: {
-      '@type': 'WebPage',
-      '@id': `https://cirujanogeneral.pe/blog/${articulo.slug}`,
-    },
-    about: {
-      '@type': 'MedicalCondition',
-      name: articulo.categoria.nombre,
-    },
+    dateModified: articulo.fechaModificacion,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    about: { '@type': 'MedicalCondition', name: articulo.categoria.nombre },
+    inLanguage: 'es-PE',
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <ArticleDetailClient articulo={articulo} />
     </>
   );
 }
-

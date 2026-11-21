@@ -35,6 +35,11 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Evita que la barra fija tape el inicio de las secciones al usar enlaces #ancla */
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
   letter-spacing: -0.02em;

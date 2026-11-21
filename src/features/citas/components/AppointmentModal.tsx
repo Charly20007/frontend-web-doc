@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '../../../config/api';
 import { X, Calendar, User, Mail, Phone, CheckCircle2, AlertCircle } from 'lucide-react';
 import type { ServicioMedico } from '../../catalogo-servicios/types';
 
@@ -35,6 +36,11 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
   const [horaDeseada, setHoraDeseada] = useState('10:00');
   const [motivo, setMotivo] = useState('');
 
+  // Preselecciona el procedimiento desde el que se abrió el modal
+  useEffect(() => {
+    if (isOpen) setIdServicio(selectedService?.id || 1);
+  }, [isOpen, selectedService]);
+
   const [loading, setLoading] = useState(false);
   const [enviado, setEnviado] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -48,22 +54,21 @@ export const AppointmentModal: React.FC<AppointmentModalProps> = ({
 
     const citaDto = {
       IdServicioMedico: Number(idServicio),
-      PacienteNombres: nombres,
-      PacienteApellidos: apellidos,
-      PacienteTelefono: telefono,
-      PacienteCorreo: correo,
+      Nombres: nombres,
+      Apellidos: apellidos,
+      Telefono: telefono,
+      Correo: correo,
       FechaHoraInicio: `${fechaDeseada}T${horaDeseada}:00`,
       MotivoConsulta: motivo || 'Solicitud de valoración desde el portal web'
     };
 
     try {
-      await axios.post('http://localhost:5000/api/citas', citaDto, { timeout: 4000 });
+      await axios.post(`${API_URL}/api/citas`, citaDto, { timeout: 8000 });
       setEnviado(true);
-    } catch {
-      // Simulación de éxito resiliente en caso la API esté apagada
-      setTimeout(() => {
-        setEnviado(true);
-      }, 800);
+    } catch (err) {
+      // No simular éxito: el paciente debe saber si su solicitud no llegó
+      const mensajeApi = axios.isAxiosError(err) ? (err.response?.data as { mensaje?: string } | undefined)?.mensaje : undefined;
+      setError(mensajeApi ?? 'No pudimos registrar tu solicitud en este momento. Inténtalo de nuevo o llámanos directamente.');
     } finally {
       setLoading(false);
     }

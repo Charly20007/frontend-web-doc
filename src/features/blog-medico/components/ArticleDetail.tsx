@@ -47,7 +47,7 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({ articulo, onOpenBo
               <span className="hidden sm:inline">•</span>
               <div className="flex items-center space-x-1">
                 <Calendar className="w-4 h-4 text-medical-500" />
-                <span>{articulo.fechaPublicacion}</span>
+                <time dateTime={articulo.fechaPublicacion}>{articulo.fechaPublicacionTexto}</time>
               </div>
             </div>
 
@@ -76,6 +76,21 @@ export const ArticleDetail: React.FC<ArticleDetailProps> = ({ articulo, onOpenBo
           className="prose prose-lg dark:prose-invert max-w-none text-slate-700 dark:text-slate-300 leading-relaxed space-y-6"
           dangerouslySetInnerHTML={{ __html: articulo.contenidoHtml }}
         />
+
+        {/* Enlace interno al procedimiento relacionado (mejora el SEO de ambas páginas) */}
+        {articulo.servicioRelacionado && (
+          <Link
+            href={`/procedimientos/${articulo.servicioRelacionado.slug}`}
+            className="mt-12 flex items-center justify-between gap-4 p-6 rounded-2xl border border-medical-500/30 bg-medical-50 dark:bg-navy-900/80 hover:border-medical-500 transition-colors"
+          >
+            <span>
+              <span className="block text-xs font-bold uppercase tracking-wider text-medical-600 dark:text-medical-400">Procedimiento relacionado</span>
+              <span className="block mt-1 text-lg font-bold text-slate-900 dark:text-white">{articulo.servicioRelacionado.nombre}</span>
+              <span className="block text-sm text-slate-600 dark:text-slate-300">Síntomas, cómo es la cirugía, recuperación y preguntas frecuentes.</span>
+            </span>
+            <ArrowRight className="w-5 h-5 shrink-0 text-medical-500" />
+          </Link>
+        )}
 
         {/* Tarjeta de Llamado a la Acción (CTA) - Conversión Quirúrgica */}
         <div className="mt-16 rounded-3xl overflow-hidden bg-gradient-to-r from-navy-900 via-navy-800 to-slate-900 text-white p-8 sm:p-10 border border-white/10 shadow-2xl relative">

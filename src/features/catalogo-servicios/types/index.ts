@@ -1,12 +1,2 @@
-export interface ServicioMedico {
-  id: number;
-  nombre: string;
-  slug: string;
-  resumen: string;
-  descripcionDetallada?: string;
-  tiempoEstimadoMinutos: number;
-  precioReferencial?: number;
-  icono?: string;
-  especialidadNombre: string;
-  destacadoEnWeb: boolean;
-}
+// El tipo de servicio es el que devuelve la API (/api/servicios)
+export type { Servicio as ServicioMedico } from '../../../lib/cms-tipos';

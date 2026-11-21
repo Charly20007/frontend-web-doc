@@ -33,7 +33,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({ articulo }) => {
 
         <div className="p-6 sm:p-7">
           <div className="flex items-center space-x-2 text-xs text-slate-500 dark:text-slate-400 mb-2 font-medium">
-            <span>{articulo.fechaPublicacion}</span>
+            <time dateTime={articulo.fechaPublicacion}>{articulo.fechaPublicacionTexto}</time>
             <span>•</span>
             <span>Por {articulo.autor}</span>
           </div>

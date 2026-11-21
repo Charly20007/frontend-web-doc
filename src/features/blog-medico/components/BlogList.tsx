@@ -1,27 +1,15 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Search, BookOpen, Sparkles, Filter } from 'lucide-react';
 import { SectionTitle } from '../../../components/ui/SectionTitle';
 import { ArticleCard } from './ArticleCard';
-import { getArticulosBlog } from '../services/blogService';
 import type { ArticuloMedico } from '../types';
 
-export const BlogList: React.FC = () => {
-  const [articulos, setArticulos] = useState<ArticuloMedico[]>([]);
-  const [loading, setLoading] = useState(true);
+export const BlogList: React.FC<{ articulos: ArticuloMedico[] }> = ({ articulos }) => {
   const [busqueda, setBusqueda] = useState('');
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<string>('todos');
 
-  useEffect(() => {
-    const cargarDatos = async () => {
-      setLoading(true);
-      const data = await getArticulosBlog();
-      setArticulos(data);
-      setLoading(false);
-    };
-    cargarDatos();
-  }, []);
 
   // Extraer categorías únicas
   const categorias = useMemo(() => {
@@ -91,13 +79,7 @@ export const BlogList: React.FC = () => {
         </div>
 
         {/* Grilla de Artículos */}
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 animate-pulse">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="h-96 rounded-3xl bg-slate-200 dark:bg-navy-900" />
-            ))}
-          </div>
-        ) : articulosFiltrados.length === 0 ? (
+        {articulosFiltrados.length === 0 ? (
           <div className="text-center py-16 bg-white dark:bg-navy-900 rounded-3xl border border-slate-200 dark:border-white/10 max-w-lg mx-auto p-8 shadow-sm">
             <BookOpen className="w-12 h-12 text-slate-400 mx-auto mb-4" />
             <h4 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No se encontraron artículos</h4>

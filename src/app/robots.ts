@@ -1,14 +1,10 @@
 import type { MetadataRoute } from 'next';
+import { getConfiguracion } from '../lib/cms';
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const config = await getConfiguracion();
   return {
-    rules: [
-      {
-        userAgent: '*',
-        allow: '/',
-      },
-    ],
-    sitemap: 'https://cirujanogeneral.pe/sitemap.xml',
+    rules: [{ userAgent: '*', allow: '/', disallow: ['/api/'] }],
+    sitemap: `${config.siteUrl}/sitemap.xml`,
   };
 }
-

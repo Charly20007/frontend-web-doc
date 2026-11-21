@@ -45,6 +45,22 @@ src/
 
 ---
 
+## Datos y SEO desde el CMS
+
+Todo el contenido (procedimientos, blog, testimonios, datos del consultorio y SEO) se lee de la API .NET
+en el servidor, así que llega completo en el HTML que indexa Google.
+
+```bash
+cp .env.example .env.local   # NEXT_PUBLIC_API_URL y REVALIDATE_SECRET
+```
+
+- `REVALIDATE_SECRET` debe ser igual a `Web:RevalidateSecret` de la API. Cuando se guarda algo en el CMS,
+  la API llama a `POST /api/revalidate` y la web muestra el cambio en la siguiente visita.
+- Como respaldo, los datos se refrescan solos cada hora.
+- La API debe estar encendida para `npm run build` y `npm run dev`.
+
+---
+
 ## 🛠️ Comandos Disponibles
 
 ```bash

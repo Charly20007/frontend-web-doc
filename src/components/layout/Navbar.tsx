@@ -1,93 +1,107 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Calendar, Phone, ShieldCheck, Sun, Moon, BookOpen } from 'lucide-react';
+import { Calendar, Menu, Phone, X } from 'lucide-react';
+import { formatearTelefono, telHref } from '../../config/site';
+import { useSitio } from '../providers/SitioContext';
 
-interface NavbarProps {
-  onOpenBooking: () => void;
-  darkMode: boolean;
-  onToggleTheme: () => void;
-}
+const ENLACES = [
+  { href: '/procedimientos', label: 'Procedimientos' },
+  { href: '/dr-juan-carlos-marcos', label: 'El especialista' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/contacto', label: 'Contacto' },
+];
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking, darkMode, onToggleTheme }) => {
+export const Navbar: React.FC<{ onOpenBooking: () => void }> = ({ onOpenBooking }) => {
   const pathname = usePathname();
-  const isHome = pathname === '/';
+  const { config } = useSitio();
+  const [abierto, setAbierto] = useState(false);
+
+  // Cierra el menú móvil al cambiar de página
+  useEffect(() => setAbierto(false), [pathname]);
+
+  const activo = (href: string) => pathname?.startsWith(href);
+  const telefono = formatearTelefono(config.telefonoPrincipal);
 
   return (
-    <header className="sticky top-0 z-50 w-full glass-panel border-b border-slate-200/80 dark:border-white/10 transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <Link 
-          href="/" 
-          className="flex items-center space-x-3 cursor-pointer" 
-          onClick={() => isHome && window.scrollTo({ top: 0, behavior: 'smooth' })}
-        >
-          <div className="w-10 h-10 rounded-xl bg-white dark:bg-navy-900 border border-slate-200 dark:border-white/10 flex items-center justify-center p-1 shadow-md overflow-hidden shrink-0">
-            <img 
-              src="/WhatsApp Image 2026-07-02 at 12.36.06 PM (1).jpeg" 
-              alt="Logo Dr. Juan Carlos Marcos Enriquez" 
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <div>
-            <span className="font-bold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white block transition-colors leading-tight">
-              Dr. Juan Marcos
-            </span>
-            <span className="text-[10px] sm:text-xs text-medical-600 dark:text-medical-400 font-semibold tracking-wider uppercase flex items-center gap-1 mt-0.5">
-              <ShieldCheck className="w-3.5 h-3.5 shrink-0 text-medical-500" /> Cirugía General y Digestiva
-            </span>
-          </div>
+    <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-slate-200/80">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between gap-4">
+        <Link href="/" className="flex items-center gap-3 shrink-0" aria-label={`${config.nombreDoctor} – inicio`}>
+          <img src="/imagenes/logo-dr-juan-carlos-marcos.jpg" alt="" width={44} height={44} className="w-11 h-11 rounded-full object-contain" />
+          <span className="leading-tight">
+            <span className="block font-display font-extrabold text-[15px] sm:text-base text-navy-900">{config.nombreCorto || config.nombreDoctor}</span>
+            <span className="block text-[11px] font-semibold uppercase tracking-wider text-medical-600">Cirugía general y digestiva</span>
+          </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center space-x-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
-          <a href={isHome ? "#servicios" : "/#servicios"} className="hover:text-medical-600 dark:hover:text-medical-400 transition-colors">Procedimientos</a>
-          <a href={isHome ? "#perfil" : "/#perfil"} className="hover:text-medical-600 dark:hover:text-medical-400 transition-colors">Especialista</a>
-          <a href={isHome ? "#testimonios" : "/#testimonios"} className="hover:text-medical-600 dark:hover:text-medical-400 transition-colors">Testimonios</a>
-          <Link 
-            href="/blog" 
-            className={`flex items-center space-x-1.5 px-3 py-1 rounded-xl transition-all font-bold ${
-              pathname?.startsWith('/blog')
-                ? 'bg-medical-500/10 text-medical-600 dark:text-medical-400 border border-medical-500/20'
-                : 'hover:text-medical-600 dark:hover:text-medical-400'
-            }`}
-          >
-            <BookOpen className="w-4 h-4 text-medical-500" />
-            <span>Blog Médico</span>
-          </Link>
+        <nav aria-label="Principal" className="hidden lg:flex items-center gap-1 text-[15px] font-semibold text-slate-600">
+          {ENLACES.map((e) => (
+            <Link
+              key={e.href}
+              href={e.href}
+              aria-current={activo(e.href) ? 'page' : undefined}
+              className={`px-3.5 py-2 rounded-lg transition-colors ${activo(e.href) ? 'text-medical-700 bg-medical-50' : 'hover:text-navy-900 hover:bg-slate-50'}`}
+            >
+              {e.label}
+            </Link>
+          ))}
         </nav>
 
-        <div className="flex items-center space-x-3 sm:space-x-4">
-          {/* Botón de cambio de tema (Sol / Luna) */}
+        <div className="flex items-center gap-2">
+          {telefono && (
+            <a href={telHref(config.telefonoPrincipal)} className="hidden md:flex items-center gap-2 px-3 py-2 text-sm font-bold text-navy-900 hover:text-medical-700">
+              <Phone className="w-4 h-4 text-medical-600" />
+              {telefono}
+            </a>
+          )}
           <button
-            onClick={onToggleTheme}
-            title={darkMode ? "Cambiar a Modo Claro" : "Cambiar a Modo Oscuro"}
-            className="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-navy-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-white/10 transition-all duration-300 shadow-sm"
-          >
-            {darkMode ? (
-              <Sun className="w-5 h-5 text-amber-400 animate-spin-slow" />
-            ) : (
-              <Moon className="w-5 h-5 text-indigo-600" />
-            )}
-          </button>
-
-          <a 
-            href="tel:+51999888777" 
-            className="hidden sm:flex items-center text-xs font-bold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/5 transition-all"
-          >
-            <Phone className="w-3.5 h-3.5 mr-1.5 text-medical-600 dark:text-medical-400" />
-            Urgencias: (01) 999-8887
-          </a>
-
-          <button
+            type="button"
             onClick={onOpenBooking}
-            className="bg-gradient-to-r from-medical-500 to-blue-600 hover:from-medical-600 hover:to-blue-700 text-white font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-medical-500/25 hover:shadow-medical-500/40 transition-all duration-300 flex items-center space-x-2 text-sm cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-2 bg-medical-600 hover:bg-medical-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow-md shadow-medical-600/20 transition-colors cursor-pointer"
           >
             <Calendar className="w-4 h-4" />
-            <span>Agendar Cita</span>
+            Agendar cita
+          </button>
+          <button
+            type="button"
+            onClick={() => setAbierto((v) => !v)}
+            aria-expanded={abierto}
+            aria-controls="menu-movil"
+            aria-label={abierto ? 'Cerrar menú' : 'Abrir menú'}
+            className="lg:hidden p-2.5 rounded-xl text-navy-900 hover:bg-slate-100 cursor-pointer"
+          >
+            {abierto ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
       </div>
+
+      {abierto && (
+        <div id="menu-movil" className="lg:hidden border-t border-slate-200 bg-white">
+          <nav aria-label="Menú móvil" className="max-w-7xl mx-auto px-4 py-4 flex flex-col">
+            {ENLACES.map((e) => (
+              <Link
+                key={e.href}
+                href={e.href}
+                className={`px-3 py-3 rounded-xl text-base font-semibold ${activo(e.href) ? 'text-medical-700 bg-medical-50' : 'text-slate-700'}`}
+              >
+                {e.label}
+              </Link>
+            ))}
+            <div className="mt-3 pt-4 border-t border-slate-200 grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <button type="button" onClick={() => { setAbierto(false); onOpenBooking(); }} className="flex items-center justify-center gap-2 bg-medical-600 text-white font-bold px-5 py-3 rounded-xl cursor-pointer">
+                <Calendar className="w-4 h-4" /> Agendar cita
+              </button>
+              {telefono && (
+                <a href={telHref(config.telefonoPrincipal)} className="flex items-center justify-center gap-2 border border-slate-300 text-navy-900 font-bold px-5 py-3 rounded-xl">
+                  <Phone className="w-4 h-4 text-medical-600" /> {telefono}
+                </a>
+              )}
+            </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 };

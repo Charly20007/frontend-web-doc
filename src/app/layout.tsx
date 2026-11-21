@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import './globals.css';
 import { AppShell } from '../components/providers/AppShell';
+import { getConfiguracion, getServicios } from '../lib/cms';
+import { nombreMarca, urlAbsoluta } from '../config/site';
 
 export const viewport: Viewport = {
   themeColor: '#0ea5e9',
@@ -8,80 +11,61 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://cirujanogeneral.pe'),
-  title: {
-    default: 'Dr. Juan Carlos Marcos Enriquez | Cirugía General & Laparoscópica',
-    template: '%s | Dr. Juan Carlos Marcos Enriquez',
-  },
-  description: 'Especialista en Cirugía General y del Aparato Digestivo por Mínima Invasión. Cirugía de vesícula, hernias, apendicitis y laparoscopía avanzada en Lima, Perú.',
-  keywords: [
-    'Cirujano General',
-    'Cirugía Laparoscópica',
-    'Cirugía de Vesícula',
-    'Colecistectomía',
-    'Hernia Inguinal',
-    'Hernia Umbilical',
-    'Apendicectomía',
-    'Dr. Juan Carlos Marcos',
-    'Cirujano en Lima',
-    'Aparato Digestivo'
-  ],
-  authors: [{ name: 'Dr. Juan Carlos Marcos Enriquez' }],
-  creator: 'Dr. Juan Carlos Marcos Enriquez',
-  publisher: 'Dr. Juan Carlos Marcos Enriquez',
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+/** Metadatos globales: salen de "Datos del consultorio" en el CMS. */
+export async function generateMetadata(): Promise<Metadata> {
+  const c = await getConfiguracion();
+  const titulo = c.metaTituloPorDefecto || c.nombreDoctor;
+  const imagen = urlAbsoluta(c, c.imagenOgPorDefectoUrl);
+
+  return {
+    metadataBase: new URL(c.siteUrl),
+    title: {
+      default: titulo,
+      // Sufijo corto para que Google no corte los títulos
+      template: `%s | ${nombreMarca(c)}`,
+    },
+    description: c.metaDescripcionPorDefecto ?? undefined,
+    authors: [{ name: c.nombreDoctor }],
+    creator: c.nombreDoctor,
+    publisher: c.nombreDoctor,
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: { index: true, follow: true, 'max-video-preview': -1, 'max-image-preview': 'large', 'max-snippet': -1 },
     },
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'es_PE',
-    url: 'https://cirujanogeneral.pe',
-    title: 'Dr. Juan Carlos Marcos Enriquez | Cirugía General & Laparoscópica',
-    description: 'Cirugía de mínima invasión con recuperación acelerada. Especialista en vesícula, hernias y patologías digestivas.',
-    siteName: 'Dr. Juan Carlos Marcos Enriquez',
-    images: [
-      {
-        url: '/WhatsApp Image 2026-07-02 at 12.36.06 PM (2).jpeg',
-        width: 1200,
-        height: 630,
-        alt: 'Dr. Juan Carlos Marcos Enriquez - Cirujano General',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Dr. Juan Carlos Marcos Enriquez | Cirugía General & Laparoscópica',
-    description: 'Cirugía de mínima invasión con recuperación acelerada en Lima, Perú.',
-    images: ['/WhatsApp Image 2026-07-02 at 12.36.06 PM (2).jpeg'],
-  },
-  icons: {
-    icon: '/favicon.svg',
-  },
-};
+    openGraph: {
+      type: 'website',
+      locale: 'es_PE',
+      url: c.siteUrl,
+      title: titulo,
+      description: c.metaDescripcionPorDefecto ?? undefined,
+      siteName: c.nombreDoctor,
+      images: imagen ? [{ url: imagen, width: 1200, height: 630, alt: c.nombreDoctor }] : undefined,
+    },
+    twitter: { card: 'summary_large_image', title: titulo, description: c.metaDescripcionPorDefecto ?? undefined, images: imagen ? [imagen] : undefined },
+    verification: c.googleSiteVerification ? { google: c.googleSiteVerification } : undefined,
+    icons: { icon: '/favicon.svg' },
+  };
+}
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const [config, servicios] = await Promise.all([getConfiguracion(), getServicios()]);
+  const ga = config.googleAnalyticsId;
+
   return (
     <html lang="es" suppressHydrationWarning>
-      <head>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      </head>
       <body>
-        <AppShell>
+        <AppShell config={config} servicios={servicios}>
           {children}
         </AppShell>
+        {ga && /^G-[A-Z0-9]+$/.test(ga) && (
+          <>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga}`} strategy="afterInteractive" />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${ga}');`}
+            </Script>
+          </>
+        )}
       </body>
     </html>
   );

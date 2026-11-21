@@ -1,130 +1,82 @@
 import React from 'react';
-import { Award, GraduationCap, HeartPulse, CheckCircle, Shield, Building2 } from 'lucide-react';
+import Image from 'next/image';
+import { BadgeCheck, CheckCircle2, HeartHandshake, Stethoscope } from 'lucide-react';
+import type { ConfiguracionSitio } from '../../../lib/cms-tipos';
 
-export const DoctorProfile: React.FC = () => {
-  return (
-    <section id="perfil" className="py-14 relative overflow-hidden transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
-          {/* Columna visual del perfil con fotos reales del doctor */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-md lg:max-w-none">
-              <div className="rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 bg-slate-100 dark:bg-navy-900 p-6 sm:p-8 shadow-2xl relative transition-colors">
-                
-                {/* Banner Oficial del Dr. Juan Carlos Marcos Enriquez */}
-                <div className="rounded-2xl overflow-hidden mb-6 border border-slate-200 dark:border-white/10 shadow-md bg-slate-950">
-                  <img 
-                    loading="lazy"
-                    src="/WhatsApp Image 2026-07-02 at 12.36.06 PM.jpeg" 
-                    alt="Banner Dr. Juan Carlos Marcos Enriquez" 
-                    className="w-full h-auto max-h-[160px] object-contain mx-auto"
-                  />
-                </div>
+const ENFOQUE = [
+  { titulo: 'Diagnóstico claro', texto: 'Revisamos tus síntomas y exámenes y te explicamos tu caso con palabras sencillas, junto con todas las alternativas.' },
+  { titulo: 'Cirugía solo si es necesaria', texto: 'Cuando el tratamiento médico es suficiente, lo indicamos. La decisión de operar se toma contigo e informada.' },
+  { titulo: 'Mínima invasión', texto: 'Siempre que es posible usamos técnica laparoscópica: incisiones pequeñas, menos dolor y una recuperación más cómoda.' },
+  { titulo: 'Acompañamiento', texto: 'Te orientamos en la preparación, el día de la cirugía y los controles posteriores hasta tu recuperación.' },
+];
 
-                {/* Foto en acción / cirugía */}
-                <div className="relative rounded-2xl overflow-hidden mb-6 border border-slate-200 dark:border-white/10 shadow-lg bg-slate-950 group">
-                  <img 
-                    loading="lazy"
-                    src="/WhatsApp Image 2026-07-02 at 12.36.06 PM (4).jpeg" 
-                    alt="Dr. Juan Carlos Marcos Enriquez realizando cirugía laparoscópica" 
-                    className="w-full h-auto max-h-[380px] object-contain mx-auto group-hover:scale-[1.02] transition-transform duration-500"
-                  />
-                  <div className="p-3 bg-slate-900 dark:bg-navy-950 border-t border-white/10 flex items-center justify-center text-center">
-                    <span className="text-white text-xs font-semibold px-3 py-1 rounded-xl bg-medical-500/20 border border-medical-500/30 text-medical-400">
-                      🏥 Cirugía del Aparato Digestivo de Alta Especialidad
-                    </span>
-                  </div>
-                </div>
-
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Dr. Juan Carlos Marcos Enriquez</h3>
-                <p className="text-sm font-bold text-medical-600 dark:text-medical-400 mt-1">Especialista en Cirugía General y del Aparato Digestivo</p>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">CMP: 45892 | RNE: 23104</p>
-
-                <div className="mt-6 space-y-3 pt-6 border-t border-slate-200 dark:border-white/10">
-                  <div className="flex items-center text-sm text-slate-700 dark:text-slate-300 font-medium">
-                    <Building2 className="w-4 h-4 text-medical-600 dark:text-medical-400 mr-3 shrink-0" />
-                    <span>Cirujano Especialista Titular en Hospitales y Clínicas de Prestigio</span>
-                  </div>
-                  <div className="flex items-center text-sm text-slate-700 dark:text-slate-300 font-medium">
-                    <GraduationCap className="w-4 h-4 text-medical-600 dark:text-medical-400 mr-3 shrink-0" />
-                    <span>Formación de Excelencia en Cirugía Laparoscópica Avanzada</span>
-                  </div>
-                  <div className="flex items-center text-sm text-slate-700 dark:text-slate-300 font-medium">
-                    <Shield className="w-4 h-4 text-medical-600 dark:text-medical-400 mr-3 shrink-0" />
-                    <span>Miembro Titular de la Sociedad Peruana de Cirugía Endoscópica</span>
-                  </div>
-                </div>
-
-                <div className="mt-6 p-4 rounded-2xl bg-slate-50 dark:bg-navy-950/60 border border-slate-200 dark:border-white/5 flex items-center justify-between text-xs transition-colors">
-                  <span className="text-slate-500 dark:text-slate-400">Seguros Médicos Aliados</span>
-                  <span className="font-bold text-slate-900 dark:text-white">Pacífico, Rímac, Mapfre y Sanitas</span>
-                </div>
+/** Perfil del doctor (página /dr-juan-carlos-marcos). Solo muestra datos verificables del CMS. */
+export const DoctorProfile: React.FC<{ config: ConfiguracionSitio }> = ({ config }) => (
+  <>
+    <section className="py-12 lg:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        <div className="lg:col-span-5">
+          <Image
+            src="/imagenes/dr-juan-carlos-marcos-cirujano.jpg"
+            alt={`${config.nombreDoctor} en sala de operaciones`}
+            width={840}
+            height={620}
+            className="rounded-3xl w-full h-auto object-cover shadow-xl"
+          />
+          <dl className="mt-6 rounded-2xl border border-slate-200 divide-y divide-slate-200 text-sm">
+            {config.especialidad && (
+              <div className="flex items-start gap-3 p-4">
+                <dt><Stethoscope className="w-5 h-5 text-medical-600" /><span className="sr-only">Especialidad</span></dt>
+                <dd className="text-slate-700">{config.especialidad}</dd>
               </div>
-            </div>
-          </div>
-
-          {/* Biografía y Filosofía Quirúrgica */}
-          <div className="lg:col-span-7 space-y-6">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-medical-500/10 text-medical-600 dark:text-medical-400 text-xs font-bold uppercase tracking-wider">
-              <HeartPulse className="w-4 h-4" />
-              <span>Filosofía & Trayectoria</span>
-            </div>
-
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight transition-colors">
-              "La mejor cirugía es aquella que resuelve el problema con la menor invasión posible para el cuerpo."
-            </h2>
-
-            <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed transition-colors">
-              Con más de 15 años de trayectoria ininterrumpida en quirófano, el **Dr. Juan Carlos Marcos Enriquez** ha dedicado su carrera profesional al perfeccionamiento de las técnicas de mínima invasión y al tratamiento integral de las enfermedades del aparato digestivo. A diferencia de las cirugías abiertas tradicionales que requieren grandes cortes y semanas de reposo, su enfoque laparoscópico utiliza micro-cámaras 4K y conductos milimétricos.
-            </p>
-
-            <p className="text-slate-600 dark:text-slate-300 text-base leading-relaxed transition-colors">
-              Cada intervención se planifica con un rigor médico exhaustivo, priorizando la máxima seguridad del paciente, una hemostasia perfecta con instrumental ultrasónico y un protocolo de analgesia multimodal para que el dolor postoperatorio sea prácticamente nulo.
-            </p>
-
-            {/* Otra foto adicional del doctor operando */}
-            <div className="pt-2">
-              <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-white/10 shadow-lg bg-slate-950 group max-w-lg">
-                <img 
-                  loading="lazy"
-                  src="/WhatsApp Image 2026-07-02 at 12.36.06 PM (3).jpeg" 
-                  alt="Dr. Juan Carlos Marcos Enriquez en intervención quirúrgica" 
-                  className="w-full h-auto max-h-[380px] object-contain mx-auto group-hover:scale-[1.02] transition-transform duration-500"
-                />
-                <div className="p-4 bg-slate-900 dark:bg-navy-950 border-t border-white/10 flex items-center justify-between">
-                  <div>
-                    <span className="text-xs uppercase tracking-wider font-extrabold text-medical-400 block">Compromiso Quirúrgico</span>
-                    <p className="text-sm font-bold text-white mt-0.5 leading-snug">Tecnología de última generación y calidez humana en cada intervención.</p>
-                  </div>
-                </div>
+            )}
+            {(config.cmp || config.rne) && (
+              <div className="flex items-start gap-3 p-4">
+                <dt><BadgeCheck className="w-5 h-5 text-medical-600" /><span className="sr-only">Colegiatura</span></dt>
+                <dd className="text-slate-700">
+                  {config.cmp && <>Colegio Médico del Perú: <strong className="text-navy-900">CMP {config.cmp}</strong></>}
+                  {config.rne && <> · Registro Nacional de Especialista: <strong className="text-navy-900">RNE {config.rne}</strong></>}
+                </dd>
               </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-              <div className="p-5 rounded-2xl bg-slate-100 dark:bg-navy-900/60 border border-slate-200 dark:border-white/10 flex items-start space-x-3 transition-colors">
-                <Award className="w-6 h-6 text-medical-600 dark:text-medical-400 shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="font-bold text-slate-900 dark:text-white text-sm">Seguridad Quirúrgica 360°</h4>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Monitoreo continuo y evaluación pre-quirúrgica integral para reducir riesgos a cero.</p>
-                </div>
+            )}
+            {config.segurosAliados && (
+              <div className="flex items-start gap-3 p-4">
+                <dt><HeartHandshake className="w-5 h-5 text-medical-600" /><span className="sr-only">Seguros</span></dt>
+                <dd className="text-slate-700">Seguros aliados: {config.segurosAliados}</dd>
               </div>
-
-              <div className="p-5 rounded-2xl bg-slate-100 dark:bg-navy-900/60 border border-slate-200 dark:border-white/10 flex items-start space-x-3 transition-colors">
-                <CheckCircle className="w-6 h-6 text-medical-600 dark:text-medical-400 shrink-0 mt-0.5" />
-                <div>
-                  <h4 className="font-bold text-slate-900 dark:text-white text-sm">Transparencia & Ética</h4>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Diagnósticos certeros sin recomendar cirugías innecesarias. Todo se explica al detalle.</p>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
+            )}
+          </dl>
         </div>
 
+        <div className="lg:col-span-7">
+          <p className="text-xs font-bold uppercase tracking-widest text-medical-700">Sobre el doctor</p>
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl font-extrabold tracking-tight text-navy-900">
+            Cirugía con criterio, explicada con claridad
+          </h2>
+          <div className="mt-6 space-y-4 text-lg text-slate-600 leading-relaxed">
+            <p>
+              El {config.nombreDoctor} es especialista en cirugía general y del aparato digestivo. Su práctica se centra en el
+              tratamiento de enfermedades de la vesícula, hernias de la pared abdominal, apendicitis y lesiones de piel y tejidos blandos.
+            </p>
+            <p>
+              Trabaja con técnicas de mínima invasión siempre que el caso lo permite, y da especial importancia a que cada paciente
+              entienda su diagnóstico, sus opciones y lo que puede esperar antes y después de la cirugía.
+            </p>
+          </div>
+
+          <h3 className="mt-10 font-display text-xl font-bold text-navy-900">Nuestro enfoque</h3>
+          <ul className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {ENFOQUE.map((e) => (
+              <li key={e.titulo} className="rounded-2xl bg-slate-50 border border-slate-200 p-5">
+                <p className="flex items-center gap-2 font-bold text-navy-900">
+                  <CheckCircle2 className="w-5 h-5 text-medical-600 shrink-0" /> {e.titulo}
+                </p>
+                <p className="mt-2 text-sm text-slate-600 leading-relaxed">{e.texto}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
-  );
-};
+  </>
+);

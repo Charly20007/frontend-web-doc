@@ -4,7 +4,7 @@ import { SeccionTestimonios } from '../../features/testimonios/SeccionTestimonio
 import { ProcedimientosDelDoctor } from '../../features/medico/ProcedimientosDelDoctor';
 import { LlamadoConsulta } from '../../features/medico/LlamadoConsulta';
 import { jsonLdPerfil } from '../../features/medico/jsonLd';
-import { EncabezadoPagina } from '../../compartido/ui/EncabezadoPagina';
+import { EncabezadoPagina } from '../../shared/ui/EncabezadoPagina';
 import { construirMetadata } from '../../lib/seo';
 import { getConfiguracion, getPaginaSeo, getServicios, getTestimonios } from '../../lib/cms';
 

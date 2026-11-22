@@ -28,7 +28,7 @@ Cuatro carpetas, cada una responde una pregunta:
 |---|---|---|
 | `app/` | ¿Qué páginas existen? | Una carpeta por URL. Cada `page.tsx` pide datos, arma el SEO y junta secciones |
 | `features/` | ¿Qué hace la web? | Una carpeta por funcionalidad con sus secciones, tipos y datos estructurados |
-| `compartido/` | ¿Qué piezas usa todo el sitio? | Barra, pie de página, botones, modal, formularios, migas de pan |
+| `shared/` | ¿Qué piezas usa todo el sitio? | Barra, pie de página, botones, modal, formularios, migas de pan |
 | `lib/` | ¿Cómo se obtienen y preparan los datos? | API, SEO y formato, sin diseño |
 
 ```
@@ -49,7 +49,7 @@ src/
 │   ├── contacto/               # DatosContacto, MapaConsultorio
 │   ├── testimonios/            # SeccionTestimonios, DejarOpinion
 │   └── citas/                  # ModalCita, SelectorTurno, fechas
-├── compartido/
+├── shared/
 │   ├── layout/                 # BarraNavegacion, PiePagina, WhatsappFlotante
 │   ├── ui/                     # BotonCita, Modal, Formulario, EncabezadoPagina, MigasDePan, TituloSeccion…
 │   ├── providers/              # MarcoSitio (estructura + modal de cita), SitioContext (datos globales)
@@ -63,11 +63,13 @@ src/
 
 **¿Dónde va un componente nuevo?** Pregúntate quién lo usa:
 - **Una sola funcionalidad** → `features/<funcionalidad>/` (por ejemplo, `TarjetaArticulo` solo la usa el blog).
-- **Varias funcionalidades** → `compartido/` (por ejemplo, `BotonCita` está en la portada, el blog y los procedimientos).
+- **Varias funcionalidades** → `shared/` (por ejemplo, `BotonCita` está en la portada, el blog y los procedimientos).
 
 **Reglas:**
+- Carpetas de estructura en inglés (`app`, `features`, `shared`, `lib`), por ser convenciones conocidas;
+  nombres del negocio en español (`citas`, `testimonios`, `BotonCita`).
 - `app/` no contiene diseño largo: compone secciones de `features/`.
-- Una funcionalidad puede usar `compartido/` y `lib/`, pero no componentes de otra funcionalidad
+- Una funcionalidad puede usar `shared/` y `lib/`, pero no componentes de otra funcionalidad
   (salvo secciones pensadas para reutilizarse, como `SeccionTestimonios`).
 - Nada del doctor va fijo en el código: nombre, foto, teléfonos y textos vienen del CMS.
 - Los componentes de cliente reciben solo los datos que necesitan (por ejemplo, el listado del blog

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { PaginaLegalVista, metadataLegal } from '../../compartido/legal/PaginaLegalVista';
+import { PaginaLegalVista, metadataLegal } from '../../shared/legal/PaginaLegalVista';
 
 export function generateMetadata(): Promise<Metadata> {
   return metadataLegal('terminos');

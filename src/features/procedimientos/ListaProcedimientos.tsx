@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, Clock } from 'lucide-react';
-import { BotonCita } from '../../compartido/ui/BotonCita';
+import { BotonCita } from '../../shared/ui/BotonCita';
 import type { Servicio } from '../../lib/cms-tipos';
 
 /** Tarjetas de todos los procedimientos y una invitación a la consulta de valoración. */

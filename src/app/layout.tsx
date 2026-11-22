@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import './globals.css';
-import { MarcoSitio } from '../compartido/providers/MarcoSitio';
+import { MarcoSitio } from '../shared/providers/MarcoSitio';
 import { getConfiguracion, getPaginasLegales, getServicios } from '../lib/cms';
 import { urlAbsoluta } from '../lib/seo';
 import { nombreMarca } from '../lib/sitio';

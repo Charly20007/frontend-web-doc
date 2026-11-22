@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { EncabezadoPagina } from '../../compartido/ui/EncabezadoPagina';
+import { EncabezadoPagina } from '../../shared/ui/EncabezadoPagina';
 import { ListaProcedimientos } from '../../features/procedimientos/ListaProcedimientos';
 import { jsonLdListaProcedimientos } from '../../features/procedimientos/jsonLd';
 import { construirMetadata } from '../../lib/seo';

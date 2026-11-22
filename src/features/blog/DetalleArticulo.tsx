@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Calendar, Clock, ShieldCheck } from 'lucide-react';
-import { BotonCita } from '../../compartido/ui/BotonCita';
+import { BotonCita } from '../../shared/ui/BotonCita';
 import { fotoDoctor } from '../../lib/sitio';
 import type { ConfiguracionSitio } from '../../lib/cms-tipos';
 import type { ArticuloMedico } from './tipos';

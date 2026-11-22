@@ -1,5 +1,5 @@
 import React from 'react';
-import { BotonCita } from '../../compartido/ui/BotonCita';
+import { BotonCita } from '../../shared/ui/BotonCita';
 
 /** Invitación final a agendar la consulta de valoración. */
 export const LlamadoConsulta: React.FC = () => (

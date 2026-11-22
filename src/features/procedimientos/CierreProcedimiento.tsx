@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { BotonCita } from '../../compartido/ui/BotonCita';
+import { BotonCita } from '../../shared/ui/BotonCita';
 import type { ConfiguracionSitio, Servicio } from '../../lib/cms-tipos';
 
 /** Llamado final a agendar y enlaces a los demás procedimientos (enlazado interno para SEO). */

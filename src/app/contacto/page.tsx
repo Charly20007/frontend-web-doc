@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { EncabezadoPagina } from '../../compartido/ui/EncabezadoPagina';
+import { EncabezadoPagina } from '../../shared/ui/EncabezadoPagina';
 import { DatosContacto } from '../../features/contacto/DatosContacto';
 import { MapaConsultorio } from '../../features/contacto/MapaConsultorio';
 import { construirMetadata, physicianJsonLd } from '../../lib/seo';

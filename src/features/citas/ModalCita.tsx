@@ -3,11 +3,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, User, Mail, Phone } from 'lucide-react';
 import { apiCliente, codigoDeError, mensajeDeError } from '../../lib/api-cliente';
-import { Modal } from '../../compartido/ui/Modal';
-import { AlertaError, PantallaExito, claseBotonPrincipal, claseBotonSecundario, claseEtiqueta, claseInput } from '../../compartido/ui/Formulario';
+import { Modal } from '../../shared/ui/Modal';
+import { AlertaError, PantallaExito, claseBotonPrincipal, claseBotonSecundario, claseEtiqueta, claseInput } from '../../shared/ui/Formulario';
 import type { Servicio } from '../../lib/cms-tipos';
 import { formatearTelefono, telHref } from '../../lib/formato';
-import { useSitio } from '../../compartido/providers/SitioContext';
+import { useSitio } from '../../shared/providers/SitioContext';
 import { SelectorTurno } from './SelectorTurno';
 import { partesFecha, type Disponibilidad } from './fechas';
 

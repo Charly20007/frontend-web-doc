@@ -2,8 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import { Search, BookOpen, Sparkles, Filter } from 'lucide-react';
-import { TituloSeccion } from '../../compartido/ui/TituloSeccion';
-import { useSitio } from '../../compartido/providers/SitioContext';
+import { TituloSeccion } from '../../shared/ui/TituloSeccion';
+import { useSitio } from '../../shared/providers/SitioContext';
 import { TarjetaArticulo } from './TarjetaArticulo';
 import type { ResumenArticulo } from './tipos';
 

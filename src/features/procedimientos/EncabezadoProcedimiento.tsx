@@ -1,7 +1,7 @@
 import React from 'react';
 import { Clock } from 'lucide-react';
-import { BotonCita } from '../../compartido/ui/BotonCita';
-import { MigasDePan } from '../../compartido/ui/MigasDePan';
+import { BotonCita } from '../../shared/ui/BotonCita';
+import { MigasDePan } from '../../shared/ui/MigasDePan';
 import { formatearTelefono, telHref } from '../../lib/formato';
 import type { ConfiguracionSitio, ServicioDetalle } from '../../lib/cms-tipos';
 

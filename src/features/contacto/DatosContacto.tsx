@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlertTriangle, Clock, Mail, MapPin, Phone } from 'lucide-react';
-import { BotonCita } from '../../compartido/ui/BotonCita';
+import { BotonCita } from '../../shared/ui/BotonCita';
 import { formatearTelefono, telHref, whatsappHref } from '../../lib/formato';
 import { agruparHorarios, direccionCompleta, numeroWhatsapp } from '../../lib/sitio';
 import type { ConfiguracionSitio } from '../../lib/cms-tipos';

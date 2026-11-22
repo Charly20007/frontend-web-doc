@@ -1,6 +1,6 @@
 import React from 'react';
 import { Clock, RefreshCw } from 'lucide-react';
-import { claseEtiqueta } from '../../compartido/ui/Formulario';
+import { claseEtiqueta } from '../../shared/ui/Formulario';
 import { formatearTelefono, telHref } from '../../lib/formato';
 import { partesFecha, type Disponibilidad } from './fechas';
 

@@ -24,6 +24,8 @@ export interface ArticuloMedico {
   tiempoLectura: number;
   vistas: number;
   publicadoEnWeb: boolean;
+  /** Elegido en el CMS para salir en grande en el blog */
+  destacado: boolean;
   seo: Seo;
 }
 

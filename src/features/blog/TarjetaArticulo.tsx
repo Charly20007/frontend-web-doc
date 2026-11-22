@@ -1,66 +1,86 @@
 import React from 'react';
 import Link from 'next/link';
-import { Clock, ArrowRight, BookOpen } from 'lucide-react';
+import { ArrowUpRight, Clock } from 'lucide-react';
 import type { ResumenArticulo } from './tipos';
 
 interface TarjetaArticuloProps {
   articulo: ResumenArticulo;
+  /**
+   * portada: imagen grande con el título encima (artículo más reciente).
+   * fila: miniatura al lado del texto (listados).
+   */
+  variante?: 'portada' | 'fila';
+  /** En la fila, muestra el resumen debajo del título. */
+  conResumen?: boolean;
 }
 
-export const TarjetaArticulo: React.FC<TarjetaArticuloProps> = ({ articulo }) => {
-  return (
-    <article className="glass-card rounded-3xl overflow-hidden flex flex-col justify-between border border-slate-200 transition-all duration-300 hover:-translate-y-1.5 group bg-white/80 shadow-lg">
-      <div>
-        {/* Imagen de portada con badge de categoría */}
+const Meta: React.FC<{ articulo: ResumenArticulo; claro?: boolean }> = ({ articulo, claro }) => (
+  <div className={`flex items-center gap-2 text-xs font-semibold ${claro ? 'text-white/80' : 'text-slate-500'}`}>
+    <span className={`uppercase tracking-wider ${claro ? 'text-medical-300' : 'text-medical-700'}`}>{articulo.categoria.nombre}</span>
+    <span aria-hidden>·</span>
+    <span className="inline-flex items-center gap-1">
+      <Clock className="w-3.5 h-3.5" />
+      {articulo.tiempoLectura} min
+    </span>
+  </div>
+);
+
+/** Un artículo del blog. Toda la tarjeta es un enlace (el del título se extiende sobre ella). */
+export const TarjetaArticulo: React.FC<TarjetaArticuloProps> = ({ articulo, variante = 'fila', conResumen }) => {
+  const href = `/blog/${articulo.slug}`;
+
+  if (variante === 'portada') {
+    return (
+      <article className="group relative h-full min-h-[22rem] sm:min-h-[26rem] rounded-3xl overflow-hidden bg-navy-900">
         {articulo.imagenPortadaUrl && (
-          <div className="relative h-52 overflow-hidden bg-slate-950">
-            <img 
-              src={articulo.imagenPortadaUrl} 
-              alt={articulo.titulo} 
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100"
-            />
-            <div className="absolute top-4 left-4">
-              <span className="px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white font-bold text-xs border border-white/20 shadow-sm">
-                {articulo.categoria.nombre}
-              </span>
-            </div>
-            <div className="absolute bottom-3 right-3 bg-slate-900/80 backdrop-blur-md px-2.5 py-1 rounded-lg border border-white/10 flex items-center space-x-1.5 text-slate-300 text-xs">
-              <Clock className="w-3.5 h-3.5 text-medical-400" />
-              <span>{articulo.tiempoLectura} min lectura</span>
-            </div>
-          </div>
+          <img
+            src={articulo.imagenPortadaUrl}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+          />
         )}
-
-        <div className="p-6 sm:p-7">
-          <div className="flex items-center space-x-2 text-xs text-slate-500 mb-2 font-medium">
-            <time dateTime={articulo.fechaPublicacion}>{articulo.fechaPublicacionTexto}</time>
-            <span>•</span>
-            <span>Por {articulo.autor}</span>
-          </div>
-
-          <h3 className="text-xl font-extrabold text-slate-900 group-hover:text-medical-600 transition-colors leading-snug mb-3">
-            <Link href={`/blog/${articulo.slug}`}>
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/60 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+          <span className="inline-block mb-3 px-2.5 py-1 rounded-md bg-white text-navy-900 text-[11px] font-bold uppercase tracking-wider">{articulo.destacado ? 'Destacado' : 'Lo más reciente'}</span>
+          <Meta articulo={articulo} claro />
+          <h2 className="mt-2 text-2xl sm:text-3xl font-extrabold text-white leading-tight max-w-2xl">
+            <Link href={href} className="after:absolute after:inset-0">
               {articulo.titulo}
             </Link>
-          </h3>
-
-          <p className="text-slate-600 text-sm leading-relaxed line-clamp-3">
-            {articulo.resumen}
-          </p>
+          </h2>
+          <p className="mt-2 text-sm sm:text-base text-white/80 line-clamp-2 max-w-2xl">{articulo.resumen}</p>
+          <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-white">
+            Leer artículo
+            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </span>
         </div>
+      </article>
+    );
+  }
+
+  return (
+    <article className="group relative flex gap-4 sm:gap-5 py-5 first:pt-0 last:pb-0">
+      <div className={`relative shrink-0 overflow-hidden rounded-xl bg-slate-100 ${conResumen ? 'w-28 h-24 sm:w-48 sm:h-32' : 'w-24 h-20 sm:w-28 sm:h-24'}`}>
+        {articulo.imagenPortadaUrl && (
+          <img
+            src={articulo.imagenPortadaUrl}
+            alt=""
+            loading="lazy"
+            className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
+          />
+        )}
       </div>
-
-      <div className="px-6 sm:px-7 pb-6 pt-2 border-t border-slate-100 flex items-center justify-between">
-        <Link 
-          href={`/blog/${articulo.slug}`}
-          className="inline-flex items-center space-x-2 text-sm font-bold text-medical-600 group-hover:text-medical-500 transition-colors"
-        >
-          <span>Leer artículo completo</span>
-          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-        </Link>
-        <div className="w-8 h-8 rounded-full bg-medical-500/10 text-medical-600 flex items-center justify-center">
-          <BookOpen className="w-4 h-4" />
-        </div>
+      <div className="min-w-0 flex flex-col">
+        <Meta articulo={articulo} />
+        <h3 className={`mt-1.5 font-bold text-slate-900 leading-snug group-hover:text-medical-700 transition-colors ${conResumen ? 'text-base sm:text-xl' : 'text-base'} line-clamp-3`}>
+          <Link href={href} className="after:absolute after:inset-0">
+            {articulo.titulo}
+          </Link>
+        </h3>
+        {conResumen && <p className="hidden sm:block mt-1.5 text-sm text-slate-600 leading-relaxed line-clamp-2">{articulo.resumen}</p>}
+        <time dateTime={articulo.fechaPublicacion} className="mt-auto pt-2 text-xs text-slate-400">
+          {articulo.fechaPublicacionTexto}
+        </time>
       </div>
     </article>
   );

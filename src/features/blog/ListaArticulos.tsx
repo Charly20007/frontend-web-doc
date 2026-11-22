@@ -1,104 +1,127 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
-import { Search, BookOpen, Sparkles, Filter } from 'lucide-react';
-import { TituloSeccion } from '../../shared/ui/TituloSeccion';
-import { useSitio } from '../../shared/providers/SitioContext';
+import React, { useMemo, useState } from 'react';
+import { BookOpen, Search } from 'lucide-react';
 import { TarjetaArticulo } from './TarjetaArticulo';
-import type { ResumenArticulo } from './tipos';
+import type { CategoriaBlog, ResumenArticulo } from './tipos';
 
-export const ListaArticulos: React.FC<{ articulos: ResumenArticulo[] }> = ({ articulos }) => {
-  const { config } = useSitio();
+const TODAS = 'todas';
+/** Cuántos artículos van en la columna junto a la portada. */
+const EN_LATERAL = 3;
+
+/** Listado del blog en formato revista: portada, columna lateral y el resto en lista. */
+interface ListaArticulosProps {
+  articulos: ResumenArticulo[];
+  /** Título de la columna junto a la portada (editable en el CMS). */
+  tituloLateral: string;
+}
+
+export const ListaArticulos: React.FC<ListaArticulosProps> = ({ articulos, tituloLateral }) => {
   const [busqueda, setBusqueda] = useState('');
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<string>('todos');
+  const [categoria, setCategoria] = useState(TODAS);
 
-
-  // Extraer categorías únicas
   const categorias = useMemo(() => {
-    const cats = articulos.map(a => a.categoria);
-    const unicas = new Map<string, { id: number; nombre: string; slug: string }>();
-    cats.forEach(c => unicas.set(c.slug, c));
-    return [
-      { id: 0, nombre: 'Todas las Especialidades', slug: 'todos' },
-      ...Array.from(unicas.values())
-    ];
+    const unicas = new Map<string, CategoriaBlog>();
+    articulos.forEach((a) => unicas.set(a.categoria.slug, a.categoria));
+    return Array.from(unicas.values());
   }, [articulos]);
 
-  // Filtrar artículos
-  const articulosFiltrados = useMemo(() => {
-    return articulos.filter(art => {
-      const coincideCat = categoriaSeleccionada === 'todos' || art.categoria.slug === categoriaSeleccionada;
-      const coincideTxt = busqueda === '' || 
-        art.titulo.toLowerCase().includes(busqueda.toLowerCase()) || 
-        art.resumen.toLowerCase().includes(busqueda.toLowerCase());
-      return coincideCat && coincideTxt;
-    });
-  }, [articulos, categoriaSeleccionada, busqueda]);
+  const filtrados = useMemo(() => {
+    const texto = busqueda.trim().toLowerCase();
+    return articulos.filter(
+      (a) =>
+        (categoria === TODAS || a.categoria.slug === categoria) &&
+        (!texto || a.titulo.toLowerCase().includes(texto) || a.resumen.toLowerCase().includes(texto)),
+    );
+  }, [articulos, categoria, busqueda]);
+
+  const filtrando = categoria !== TODAS || busqueda.trim() !== '';
+  // Portada: la que eligió el consultorio en el CMS o, si no hay, la más reciente
+  const portada = filtrados.find((a) => a.destacado) ?? filtrados[0];
+  const siguientes = filtrados.filter((a) => a !== portada);
+  const lateral = siguientes.slice(0, EN_LATERAL);
+  const resto = siguientes.slice(EN_LATERAL);
+
+  const pestanas = [{ slug: TODAS, nombre: 'Todos' }, ...categorias];
 
   return (
-    <div className="min-h-screen py-12 sm:py-16 bg-slate-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <TituloSeccion
-          nivel="h1"
-          antetitulo="Salud y prevención digestiva"
-          iconoAntetitulo={<Sparkles className="w-4 h-4 text-medical-500" />}
-          titulo="Blog quirúrgico y consejos del"
-          resaltado={config.nombreCorto || config.nombreDoctor}
-          subtitulo="Información médica clara, veraz y fundamentada científicamente para cuidar tu sistema digestivo y prepararte con tranquilidad para una intervención."
-        />
-
-        {/* Buscador y Filtros */}
-        <div className="max-w-4xl mx-auto mb-12 space-y-6">
-          {/* Barra de búsqueda */}
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Buscar por síntoma, enfermedad o procedimiento (ej. vesícula, hernia, dolor, dieta)..."
-              value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-medical-500 shadow-sm text-sm sm:text-base transition-all"
-            />
-          </div>
-
-          {/* Botones de categoría */}
-          <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none">
-            <Filter className="w-4 h-4 text-slate-400 shrink-0 mr-1" />
-            {categorias.map(cat => (
+    <div className="mt-8">
+      {/* Pestañas de categoría + búsqueda */}
+      <div className="flex flex-col-reverse md:flex-row md:items-end md:justify-between gap-4 border-b border-slate-200">
+        <nav aria-label="Categorías" className="flex gap-6 overflow-x-auto scrollbar-none -mb-px">
+          {pestanas.map((c) => {
+            const activa = categoria === c.slug;
+            return (
               <button
-                key={cat.slug}
-                onClick={() => setCategoriaSeleccionada(cat.slug)}
-                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap shrink-0 ${
-                  categoriaSeleccionada === cat.slug
-                    ? 'bg-gradient-to-r from-medical-500 to-blue-600 text-white shadow-md shadow-medical-500/20'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:border-medical-500/50'
+                key={c.slug}
+                type="button"
+                aria-pressed={activa}
+                onClick={() => setCategoria(c.slug)}
+                className={`pb-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${
+                  activa ? 'border-medical-600 text-navy-900' : 'border-transparent text-slate-500 hover:text-navy-900'
                 }`}
               >
-                {cat.nombre}
+                {c.nombre}
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Grilla de Artículos */}
-        {articulosFiltrados.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-3xl border border-slate-200 max-w-lg mx-auto p-8 shadow-sm">
-            <BookOpen className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-            <h4 className="text-lg font-bold text-slate-900 mb-2">No se encontraron artículos</h4>
-            <p className="text-sm text-slate-500">
-              Intenta con otra palabra clave o selecciona la pestaña de todas las especialidades.
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {articulosFiltrados.map(art => (
-              <TarjetaArticulo key={art.id} articulo={art} />
-            ))}
-          </div>
-        )}
-
+            );
+          })}
+        </nav>
+        <label className="relative md:w-72 md:mb-3 shrink-0">
+          <span className="sr-only">Buscar artículos</span>
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input
+            type="search"
+            placeholder="Buscar un tema…"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            className="w-full pl-9 pr-3 py-2 rounded-lg bg-white border border-slate-200 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-medical-500"
+          />
+        </label>
       </div>
+
+      {filtrados.length === 0 ? (
+        <div className="mt-10 text-center py-12">
+          <BookOpen className="w-10 h-10 text-slate-300 mx-auto mb-3" />
+          <p className="font-bold text-slate-900">No encontramos artículos sobre eso</p>
+          <p className="mt-1 text-sm text-slate-500">Prueba con otra palabra o vuelve a «Todos».</p>
+        </div>
+      ) : filtrando ? (
+        // Resultados: una sola lista, con resumen
+        <div className="mt-8 max-w-4xl divide-y divide-slate-200">
+          {filtrados.map((a) => (
+            <TarjetaArticulo key={a.id} articulo={a} conResumen />
+          ))}
+        </div>
+      ) : (
+        <>
+          <div className="mt-8 grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <div className={lateral.length ? 'lg:col-span-3' : 'lg:col-span-5'}>
+              <TarjetaArticulo articulo={portada} variante="portada" />
+            </div>
+            {lateral.length > 0 && (
+              <aside className="lg:col-span-2">
+                <h2 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">{tituloLateral}</h2>
+                <div className="divide-y divide-slate-200">
+                  {lateral.map((a) => (
+                    <TarjetaArticulo key={a.id} articulo={a} />
+                  ))}
+                </div>
+              </aside>
+            )}
+          </div>
+
+          {resto.length > 0 && (
+            <section className="mt-14">
+              <h2 className="text-xl font-extrabold text-navy-900 pb-4 border-b border-slate-200">Más artículos</h2>
+              <div className="mt-6 max-w-4xl divide-y divide-slate-200">
+                {resto.map((a) => (
+                  <TarjetaArticulo key={a.id} articulo={a} conResumen />
+                ))}
+              </div>
+            </section>
+          )}
+        </>
+      )}
     </div>
   );
 };

@@ -106,6 +106,10 @@ export interface PaginaSeo {
   clave: string;
   ruta: string;
   nombrePagina: string;
+  /** Textos visibles editados en el CMS; vacío = texto por defecto de la web */
+  titulo?: string | null;
+  descripcion?: string | null;
+  tituloSecundario?: string | null;
   seo: Seo;
   fechaModificacion: string;
 }

@@ -1,12 +1,15 @@
 import React from 'react';
 import { Star, Quote, CheckCircle } from 'lucide-react';
 import type { Testimonio } from '../../../lib/cms-tipos';
+import { DejarOpinion } from '../../testimonios/components/DejarOpinion';
 
 interface TestimonialsSectionProps {
   testimonios: Testimonio[];
   etiqueta?: string;
   titulo?: string;
   descripcion?: string;
+  /** Procedimiento a preseleccionar en "Deja tu opinión". */
+  idServicio?: number;
 }
 
 export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
@@ -14,8 +17,20 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
   etiqueta = 'Experiencias Verificadas',
   titulo = 'Lo Que Dicen Nuestros Pacientes',
   descripcion = 'La mayor satisfacción de nuestra práctica quirúrgica es ver a nuestros pacientes recuperar plenamente su salud y calidad de vida.',
+  idServicio,
 }) => {
-  if (testimonios.length === 0) return null;
+  // Sin testimonios publicados: solo la invitación a dejar el primero
+  if (testimonios.length === 0) {
+    return (
+      <section id="testimonios" className="py-14 bg-slate-50">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-display text-2xl font-extrabold tracking-tight text-navy-900">¿Fuiste paciente del doctor?</h2>
+          <p className="mt-2 text-slate-600">Cuéntanos tu experiencia: ayuda a otros pacientes a decidir con confianza.</p>
+          <DejarOpinion idServicio={idServicio} className="mt-6" />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="testimonios" className="py-20 lg:py-24 bg-slate-50">
@@ -48,6 +63,11 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
             </li>
           ))}
         </ul>
+
+        <div className="mt-10 text-center">
+          <p className="text-sm text-slate-600 mb-3">¿Fuiste paciente del doctor? Tu opinión ayuda a otros pacientes.</p>
+          <DejarOpinion idServicio={idServicio} />
+        </div>
       </div>
     </section>
   );

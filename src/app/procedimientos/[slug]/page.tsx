@@ -240,6 +240,7 @@ export default async function ProcedimientoPage({ params }: PageProps) {
       {testimonios.length > 0 && (
         <TestimonialsSection
           testimonios={testimonios}
+          idServicio={p.id}
           etiqueta="Experiencias de pacientes"
           titulo={`Pacientes de ${nombreCorto.toLowerCase()}`}
           descripcion="Lo que cuentan quienes ya pasaron por este procedimiento."

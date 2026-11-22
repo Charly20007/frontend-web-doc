@@ -54,7 +54,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="es" suppressHydrationWarning>
-      <body>
+      {/* suppressHydrationWarning: extensiones del navegador (p. ej. ColorZilla) agregan atributos al <body>.
+          Solo ignora diferencias de atributos de este elemento, no de su contenido. */}
+      <body suppressHydrationWarning>
         <AppShell config={config} servicios={servicios} legales={legales}>
           {children}
         </AppShell>

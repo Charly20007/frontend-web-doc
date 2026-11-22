@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { SeccionTestimonios } from '../../../features/testimonios/components/SeccionTestimonios';
-import { EncabezadoProcedimiento } from '../../../features/procedimientos/components/EncabezadoProcedimiento';
-import { ContenidoProcedimiento } from '../../../features/procedimientos/components/ContenidoProcedimiento';
-import { CierreProcedimiento } from '../../../features/procedimientos/components/CierreProcedimiento';
+import { SeccionTestimonios } from '../../../features/testimonios/SeccionTestimonios';
+import { EncabezadoProcedimiento } from '../../../features/procedimientos/EncabezadoProcedimiento';
+import { ContenidoProcedimiento } from '../../../features/procedimientos/ContenidoProcedimiento';
+import { CierreProcedimiento } from '../../../features/procedimientos/CierreProcedimiento';
 import { jsonLdProcedimiento } from '../../../features/procedimientos/jsonLd';
 import { construirMetadata } from '../../../lib/seo';
 import { getArticulos, getConfiguracion, getServicio, getServicios, getTestimonios } from '../../../lib/cms';

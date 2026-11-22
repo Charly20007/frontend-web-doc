@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState } from 'react';
 import { BarraNavegacion } from '../layout/BarraNavegacion';
 import { PiePagina } from '../layout/PiePagina';
 import { WhatsappFlotante } from '../layout/WhatsappFlotante';
-import { ModalCita } from '../../features/citas/components/ModalCita';
+import { ModalCita } from '../../features/citas/ModalCita';
 import type { ConfiguracionSitio, PaginaLegalResumen, Servicio } from '../../lib/cms-tipos';
 import { SitioProvider } from './SitioContext';
 

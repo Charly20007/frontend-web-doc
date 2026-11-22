@@ -1,4 +1,4 @@
-import type { ConfiguracionSitio, ServicioDetalle } from '../../lib/cms-tipos';
+import type { ConfiguracionSitio, Servicio, ServicioDetalle } from '../../lib/cms-tipos';
 
 /** Datos estructurados de la página de un procedimiento: MedicalWebPage y, si hay, FAQPage. */
 export function jsonLdProcedimiento(config: ConfiguracionSitio, p: ServicioDetalle) {
@@ -44,3 +44,15 @@ export function jsonLdProcedimiento(config: ConfiguracionSitio, p: ServicioDetal
     ]),
   ];
 }
+
+/** Lista de procedimientos (ItemList) para la página /procedimientos. */
+export const jsonLdListaProcedimientos = (config: ConfiguracionSitio, procedimientos: Servicio[]) => ({
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: procedimientos.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: p.nombre,
+    url: `${config.siteUrl}/procedimientos/${p.slug}`,
+  })),
+});

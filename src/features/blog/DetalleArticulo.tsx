@@ -1,10 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Calendar, Clock, ShieldCheck } from 'lucide-react';
-import { BotonCita } from '../../../components/ui/BotonCita';
-import { fotoDoctor } from '../../../lib/sitio';
-import type { ConfiguracionSitio } from '../../../lib/cms-tipos';
-import type { ArticuloMedico } from '../tipos';
+import { BotonCita } from '../../compartido/ui/BotonCita';
+import { fotoDoctor } from '../../lib/sitio';
+import type { ConfiguracionSitio } from '../../lib/cms-tipos';
+import type { ArticuloMedico } from './tipos';
 
 interface DetalleArticuloProps {
   articulo: ArticuloMedico;

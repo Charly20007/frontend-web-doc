@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import type { ArticuloMedico } from '../../blog/tipos';
+import type { ArticuloMedico } from '../blog/tipos';
 import { Encabezado } from './Encabezado';
 
 export const BlogInicio: React.FC<{ articulos: ArticuloMedico[] }> = ({ articulos }) => {

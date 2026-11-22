@@ -1,6 +1,6 @@
 import React from 'react';
-import { BotonCita } from '../../../components/ui/BotonCita';
-import { BotonWhatsapp } from '../../../components/ui/BotonWhatsapp';
+import { BotonCita } from '../../compartido/ui/BotonCita';
+import { BotonWhatsapp } from '../../compartido/ui/BotonWhatsapp';
 
 export const CtaFinal: React.FC = () => (
   <section className="bg-navy-900 relative overflow-hidden">

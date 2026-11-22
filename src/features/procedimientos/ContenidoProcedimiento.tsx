@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { AlertTriangle, ArrowRight, BookOpen, CheckCircle2, HeartPulse } from 'lucide-react';
-import type { ServicioDetalle } from '../../../lib/cms-tipos';
-import type { ArticuloMedico } from '../../blog/tipos';
+import type { ServicioDetalle } from '../../lib/cms-tipos';
+import type { ArticuloMedico } from '../blog/tipos';
 
 /** Cuerpo del procedimiento: introducción, indicaciones, pasos, recuperación, preguntas y artículos. */
 export const ContenidoProcedimiento: React.FC<{ p: ServicioDetalle; articulos: ArticuloMedico[] }> = ({ p, articulos }) => (

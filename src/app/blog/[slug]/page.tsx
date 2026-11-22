@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { DetalleArticulo } from '../../../features/blog/components/DetalleArticulo';
+import { DetalleArticulo } from '../../../features/blog/DetalleArticulo';
 import { construirMetadata, urlAbsoluta } from '../../../lib/seo';
 import { getArticulo, getArticulos, getConfiguracion } from '../../../lib/cms';
 import { redirigirSiCorresponde } from '../../../lib/redirecciones';

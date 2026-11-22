@@ -2,10 +2,10 @@
 
 import React, { useState } from 'react';
 import { MessageSquarePlus, Star } from 'lucide-react';
-import { apiCliente, mensajeDeError } from '../../../lib/api-cliente';
-import { useSitio } from '../../../components/providers/SitioContext';
-import { Modal } from '../../../components/ui/Modal';
-import { AlertaError, PantallaExito, claseBotonPrincipal, claseBotonSecundario, claseEtiqueta, claseInput } from '../../../components/ui/Formulario';
+import { apiCliente, mensajeDeError } from '../../lib/api-cliente';
+import { useSitio } from '../../compartido/providers/SitioContext';
+import { Modal } from '../../compartido/ui/Modal';
+import { AlertaError, PantallaExito, claseBotonPrincipal, claseBotonSecundario, claseEtiqueta, claseInput } from '../../compartido/ui/Formulario';
 
 interface DejarOpinionProps {
   /** Procedimiento a preseleccionar (por ejemplo, desde su página). */

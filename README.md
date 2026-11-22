@@ -22,39 +22,52 @@ Migrado a **Next.js (App Router)** para máxima optimización en posicionamiento
 Organización **por funcionalidad** con **servidor primero**: las páginas piden los datos en el servidor
 y Google recibe el HTML completo. Solo son de cliente (`'use client'`) las piezas interactivas.
 
+Cuatro carpetas, cada una responde una pregunta:
+
+| Carpeta | Pregunta | Contiene |
+|---|---|---|
+| `app/` | ¿Qué páginas existen? | Una carpeta por URL. Cada `page.tsx` pide datos, arma el SEO y junta secciones |
+| `features/` | ¿Qué hace la web? | Una carpeta por funcionalidad con sus secciones, tipos y datos estructurados |
+| `compartido/` | ¿Qué piezas usa todo el sitio? | Barra, pie de página, botones, modal, formularios, migas de pan |
+| `lib/` | ¿Cómo se obtienen y preparan los datos? | API, SEO y formato, sin diseño |
+
 ```
 src/
-├── app/                        # Rutas. Cada page.tsx: pide datos, arma metadatos y compone secciones
+├── app/                        # Páginas cortas: datos + SEO + secciones
+│   ├── page.tsx                # /
+│   ├── procedimientos/         # /procedimientos y /procedimientos/[slug]
+│   ├── blog/                   # /blog y /blog/[slug]
+│   ├── dr-juan-carlos-marcos/  contacto/  privacidad/  terminos/  consentimiento-informado/
 │   ├── [...ruta]/              # URLs antiguas → redirecciones 301 configuradas en el CMS
 │   ├── api/revalidate/         # La API avisa aquí cuando cambia algo en el CMS
-│   ├── blog/  procedimientos/  dr-juan-carlos-marcos/  contacto/  privacidad/ …
-│   ├── layout.tsx  globals.css  sitemap.ts  robots.ts
-├── components/                 # Piezas compartidas por varias funcionalidades
+│   └── layout.tsx  globals.css  sitemap.ts  robots.ts  not-found.tsx  error.tsx
+├── features/
+│   ├── inicio/                 # HeroInicio, FranjaConfianza, ProcedimientosInicio, SobreDoctor…
+│   ├── procedimientos/         # ListaProcedimientos, Encabezado/Contenido/CierreProcedimiento, jsonLd
+│   ├── blog/                   # ListaArticulos, TarjetaArticulo, DetalleArticulo, tipos
+│   ├── medico/                 # PerfilDoctor, ProcedimientosDelDoctor, LlamadoConsulta, jsonLd
+│   ├── contacto/               # DatosContacto, MapaConsultorio
+│   ├── testimonios/            # SeccionTestimonios, DejarOpinion
+│   └── citas/                  # ModalCita, SelectorTurno, fechas
+├── compartido/
 │   ├── layout/                 # BarraNavegacion, PiePagina, WhatsappFlotante
-│   ├── legal/                  # PaginaLegalVista (privacidad, términos, consentimiento)
+│   ├── ui/                     # BotonCita, Modal, Formulario, EncabezadoPagina, MigasDePan, TituloSeccion…
 │   ├── providers/              # MarcoSitio (estructura + modal de cita), SitioContext (datos globales)
-│   └── ui/                     # BotonCita, Modal, Formulario, MigasDePan, TituloSeccion, BotonWhatsapp
-├── features/                   # Una carpeta por funcionalidad, con sus componentes y tipos
-│   ├── inicio/                 # Secciones de la portada
-│   ├── procedimientos/         # Encabezado, contenido, cierre y datos estructurados de cada procedimiento
-│   ├── blog/                   # Listado, tarjeta y detalle de artículos
-│   ├── medico/                 # Perfil del doctor
-│   ├── testimonios/            # Sección de testimonios y formulario «Deja tu opinión»
-│   └── citas/                  # Modal de reserva con turnos libres
+│   └── legal/                  # PaginaLegalVista (privacidad, términos, consentimiento)
 ├── lib/
-│   ├── cms.ts                  # Lecturas de la API en el servidor (con caché y revalidación)
-│   ├── cms-tipos.ts            # Tipos de lo que devuelve la API
+│   ├── cms.ts  cms-tipos.ts    # Lecturas de la API en el servidor (con caché y revalidación) y sus tipos
 │   ├── api-cliente.ts          # Envíos desde el navegador (citas, opiniones) y mensajes de error
-│   ├── sitio.ts                # Datos derivados de la configuración (foto, WhatsApp, horarios)
-│   ├── seo.ts                  # Metadatos y Schema.org
-│   ├── formato.ts              # Teléfonos, enlaces y fechas
-│   └── redirecciones.ts
+│   ├── seo.ts  sitio.ts  formato.ts  redirecciones.ts
 └── config/api.ts               # URL de la API (NEXT_PUBLIC_API_URL)
 ```
 
+**¿Dónde va un componente nuevo?** Pregúntate quién lo usa:
+- **Una sola funcionalidad** → `features/<funcionalidad>/` (por ejemplo, `TarjetaArticulo` solo la usa el blog).
+- **Varias funcionalidades** → `compartido/` (por ejemplo, `BotonCita` está en la portada, el blog y los procedimientos).
+
 **Reglas:**
-- `app/` no contiene diseño largo: compone componentes de `features/`.
-- Una funcionalidad puede usar `components/` y `lib/`, pero no componentes de otra funcionalidad
+- `app/` no contiene diseño largo: compone secciones de `features/`.
+- Una funcionalidad puede usar `compartido/` y `lib/`, pero no componentes de otra funcionalidad
   (salvo secciones pensadas para reutilizarse, como `SeccionTestimonios`).
 - Nada del doctor va fijo en el código: nombre, foto, teléfonos y textos vienen del CMS.
 - Los componentes de cliente reciben solo los datos que necesitan (por ejemplo, el listado del blog

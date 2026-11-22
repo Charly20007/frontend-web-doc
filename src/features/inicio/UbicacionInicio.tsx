@@ -1,8 +1,8 @@
 import React from 'react';
 import { Clock, MapPin, Phone } from 'lucide-react';
-import type { ConfiguracionSitio } from '../../../lib/cms-tipos';
-import { formatearTelefono, telHref } from '../../../lib/formato';
-import { agruparHorarios, direccionCompleta } from '../../../lib/sitio';
+import type { ConfiguracionSitio } from '../../lib/cms-tipos';
+import { formatearTelefono, telHref } from '../../lib/formato';
+import { agruparHorarios, direccionCompleta } from '../../lib/sitio';
 import { Encabezado } from './Encabezado';
 
 export const UbicacionInicio: React.FC<{ config: ConfiguracionSitio }> = ({ config }) => {

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Clock } from 'lucide-react';
-import { BotonCita } from '../../../components/ui/BotonCita';
-import { MigasDePan } from '../../../components/ui/MigasDePan';
-import { formatearTelefono, telHref } from '../../../lib/formato';
-import type { ConfiguracionSitio, ServicioDetalle } from '../../../lib/cms-tipos';
+import { BotonCita } from '../../compartido/ui/BotonCita';
+import { MigasDePan } from '../../compartido/ui/MigasDePan';
+import { formatearTelefono, telHref } from '../../lib/formato';
+import type { ConfiguracionSitio, ServicioDetalle } from '../../lib/cms-tipos';
 
 /** Cabecera del procedimiento: migas, nombre, resumen, duración, precio y botones de contacto. */
 export const EncabezadoProcedimiento: React.FC<{ p: ServicioDetalle; config: ConfiguracionSitio }> = ({ p, config }) => {

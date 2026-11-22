@@ -1,7 +1,7 @@
 import React from 'react';
 import { Star, Quote, CheckCircle } from 'lucide-react';
-import type { Testimonio } from '../../../lib/cms-tipos';
-import { DejarOpinion } from '../../testimonios/components/DejarOpinion';
+import type { Testimonio } from '../../lib/cms-tipos';
+import { DejarOpinion } from './DejarOpinion';
 
 interface SeccionTestimoniosProps {
   testimonios: Testimonio[];

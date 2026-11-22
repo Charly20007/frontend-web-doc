@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Activity, ArrowRight, Scissors, Shield, Stethoscope } from 'lucide-react';
-import type { Servicio } from '../../../lib/cms-tipos';
+import type { Servicio } from '../../lib/cms-tipos';
 import { Encabezado } from './Encabezado';
 
 const ICONOS: Record<string, React.ReactNode> = {

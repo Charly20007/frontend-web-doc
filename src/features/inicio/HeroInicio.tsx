@@ -1,10 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
 import { ShieldCheck } from 'lucide-react';
-import type { ConfiguracionSitio } from '../../../lib/cms-tipos';
-import { fotoDoctor } from '../../../lib/sitio';
-import { BotonCita } from '../../../components/ui/BotonCita';
-import { BotonWhatsapp } from '../../../components/ui/BotonWhatsapp';
+import type { ConfiguracionSitio } from '../../lib/cms-tipos';
+import { fotoDoctor } from '../../lib/sitio';
+import { BotonCita } from '../../compartido/ui/BotonCita';
+import { BotonWhatsapp } from '../../compartido/ui/BotonWhatsapp';
 
 export const HeroInicio: React.FC<{ config: ConfiguracionSitio }> = ({ config }) => (
   <section className="relative overflow-hidden bg-gradient-to-b from-medical-50/70 via-white to-white">

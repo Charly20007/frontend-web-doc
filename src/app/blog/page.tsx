@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ListaArticulos } from '../../features/blog/components/ListaArticulos';
+import { ListaArticulos } from '../../features/blog/ListaArticulos';
 import { construirMetadata } from '../../lib/seo';
 import { getArticulos, getConfiguracion, getPaginaSeo } from '../../lib/cms';
 import { aResumen } from '../../features/blog/tipos';

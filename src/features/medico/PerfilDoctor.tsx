@@ -1,8 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { BadgeCheck, CheckCircle2, HeartHandshake, Stethoscope } from 'lucide-react';
-import type { ConfiguracionSitio } from '../../../lib/cms-tipos';
-import { fotoDoctor } from '../../../lib/sitio';
+import type { ConfiguracionSitio } from '../../lib/cms-tipos';
+import { fotoDoctor } from '../../lib/sitio';
 
 const ENFOQUE = [
   { titulo: 'Diagnóstico claro', texto: 'Revisamos tus síntomas y exámenes y te explicamos tu caso con palabras sencillas, junto con todas las alternativas.' },

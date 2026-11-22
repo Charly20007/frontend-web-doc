@@ -2,10 +2,10 @@
 
 import React, { useState, useMemo } from 'react';
 import { Search, BookOpen, Sparkles, Filter } from 'lucide-react';
-import { TituloSeccion } from '../../../components/ui/TituloSeccion';
-import { useSitio } from '../../../components/providers/SitioContext';
+import { TituloSeccion } from '../../compartido/ui/TituloSeccion';
+import { useSitio } from '../../compartido/providers/SitioContext';
 import { TarjetaArticulo } from './TarjetaArticulo';
-import type { ResumenArticulo } from '../tipos';
+import type { ResumenArticulo } from './tipos';
 
 export const ListaArticulos: React.FC<{ articulos: ResumenArticulo[] }> = ({ articulos }) => {
   const { config } = useSitio();

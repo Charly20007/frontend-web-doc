@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { BotonCita } from '../../../components/ui/BotonCita';
-import type { ConfiguracionSitio, Servicio } from '../../../lib/cms-tipos';
+import { BotonCita } from '../../compartido/ui/BotonCita';
+import type { ConfiguracionSitio, Servicio } from '../../lib/cms-tipos';
 
 /** Llamado final a agendar y enlaces a los demás procedimientos (enlazado interno para SEO). */
 export const CierreProcedimiento: React.FC<{ slug: string; config: ConfiguracionSitio; otros: Servicio[] }> = ({ slug, config, otros }) => (

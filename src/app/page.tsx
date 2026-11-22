@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 import { construirMetadata, physicianJsonLd } from '../lib/seo';
 import { getArticulos, getConfiguracion, getPaginaSeo, getServicios, getTestimonios } from '../lib/cms';
-import { HeroInicio } from '../features/inicio/components/HeroInicio';
-import { FranjaConfianza } from '../features/inicio/components/FranjaConfianza';
-import { ProcedimientosInicio } from '../features/inicio/components/ProcedimientosInicio';
-import { SobreDoctor } from '../features/inicio/components/SobreDoctor';
-import { BlogInicio } from '../features/inicio/components/BlogInicio';
-import { UbicacionInicio } from '../features/inicio/components/UbicacionInicio';
-import { CtaFinal } from '../features/inicio/components/CtaFinal';
-import { SeccionTestimonios } from '../features/testimonios/components/SeccionTestimonios';
+import { HeroInicio } from '../features/inicio/HeroInicio';
+import { FranjaConfianza } from '../features/inicio/FranjaConfianza';
+import { ProcedimientosInicio } from '../features/inicio/ProcedimientosInicio';
+import { SobreDoctor } from '../features/inicio/SobreDoctor';
+import { BlogInicio } from '../features/inicio/BlogInicio';
+import { UbicacionInicio } from '../features/inicio/UbicacionInicio';
+import { CtaFinal } from '../features/inicio/CtaFinal';
+import { SeccionTestimonios } from '../features/testimonios/SeccionTestimonios';
 
 export async function generateMetadata(): Promise<Metadata> {
   const [config, pagina] = await Promise.all([getConfiguracion(), getPaginaSeo('inicio')]);

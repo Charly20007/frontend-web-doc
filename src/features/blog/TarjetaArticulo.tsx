@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Clock, ArrowRight, BookOpen } from 'lucide-react';
-import type { ResumenArticulo } from '../tipos';
+import type { ResumenArticulo } from './tipos';
 
 interface TarjetaArticuloProps {
   articulo: ResumenArticulo;

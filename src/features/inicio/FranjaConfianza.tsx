@@ -1,7 +1,7 @@
 import React from 'react';
 import { BadgeCheck, Clock, HeartHandshake, Microscope } from 'lucide-react';
-import type { ConfiguracionSitio } from '../../../lib/cms-tipos';
-import { agruparHorarios } from '../../../lib/sitio';
+import type { ConfiguracionSitio } from '../../lib/cms-tipos';
+import { agruparHorarios } from '../../lib/sitio';
 
 /** Datos verificables que dan confianza: colegiatura, técnica, seguros y horario. */
 export const FranjaConfianza: React.FC<{ config: ConfiguracionSitio }> = ({ config }) => {

@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { MessageCircle } from 'lucide-react';
-import { numeroWhatsapp, whatsappHref } from '../../config/site';
+import { whatsappHref } from '../../lib/formato';
+import { numeroWhatsapp } from '../../lib/sitio';
 import { useSitio } from '../providers/SitioContext';
 
 /** Botón "Escribir por WhatsApp" para usar dentro de las secciones. */

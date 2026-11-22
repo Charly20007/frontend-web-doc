@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import './globals.css';
-import { AppShell } from '../components/providers/AppShell';
+import { MarcoSitio } from '../components/providers/MarcoSitio';
 import { getConfiguracion, getPaginasLegales, getServicios } from '../lib/cms';
-import { nombreMarca, urlAbsoluta } from '../config/site';
+import { urlAbsoluta } from '../lib/seo';
+import { nombreMarca } from '../lib/sitio';
 
 export const viewport: Viewport = {
   themeColor: '#0ea5e9',
@@ -57,9 +58,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       {/* suppressHydrationWarning: extensiones del navegador (p. ej. ColorZilla) agregan atributos al <body>.
           Solo ignora diferencias de atributos de este elemento, no de su contenido. */}
       <body suppressHydrationWarning>
-        <AppShell config={config} servicios={servicios} legales={legales}>
+        <MarcoSitio config={config} servicios={servicios} legales={legales}>
           {children}
-        </AppShell>
+        </MarcoSitio>
         {ga && /^G-[A-Z0-9]+$/.test(ga) && (
           <>
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${ga}`} strategy="afterInteractive" />

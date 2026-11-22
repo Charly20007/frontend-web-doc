@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { numeroWhatsapp, whatsappHref } from '../../config/site';
+import { whatsappHref } from '../../lib/formato';
+import { numeroWhatsapp } from '../../lib/sitio';
 import { useSitio } from '../providers/SitioContext';
 
 /** Botón fijo de WhatsApp: el canal preferido de los pacientes para pedir cita. */

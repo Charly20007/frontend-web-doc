@@ -9,7 +9,7 @@ Migrado a **Next.js (App Router)** para máxima optimización en posicionamiento
 ## 🚀 Tecnologías Principales
 
 * **Framework:** Next.js (App Router) + React 19
-* **Estilos:** Tailwind CSS v4 con variables semánticas médicas y glassmorphism
+* **Estilos:** Tailwind CSS v4 con la paleta del consultorio (sin modo oscuro)
 * **Iconografía:** Lucide React
 * **Tipografías:** Plus Jakarta Sans & Outfit (Fontsource Variable)
 * **SEO y Metadatos:** Next.js Metadata API, Open Graph, Twitter Cards, robots.ts y sitemap.ts
@@ -19,29 +19,46 @@ Migrado a **Next.js (App Router)** para máxima optimización en posicionamiento
 
 ## 📁 Arquitectura del Proyecto
 
+Organización **por funcionalidad** con **servidor primero**: las páginas piden los datos en el servidor
+y Google recibe el HTML completo. Solo son de cliente (`'use client'`) las piezas interactivas.
+
 ```
 src/
-├── app/
-│   ├── blog/
-│   │   ├── [slug]/
-│   │   │   └── page.tsx      # Vista editorial SSG con generateStaticParams y generateMetadata
-│   │   └── page.tsx          # Catálogo general de artículos médicos
-│   ├── globals.css           # Tailwind v4, modo oscuro y temas
-│   ├── layout.tsx            # RootLayout con metadatos globales y AppShell
-│   ├── page.tsx              # Landing page principal con Schema.org Physician
-│   ├── robots.ts             # Directivas robots.txt para Googlebot
-│   └── sitemap.ts            # Generador dinámico de sitemap.xml
-├── components/
-│   ├── feedback/             # LoadingFallback, estados de carga
-│   ├── layout/               # Navbar, Footer
-│   ├── providers/            # AppShell (manejo de modo oscuro y modal de citas)
-│   └── ui/                   # Badge, GlassCard, SectionTitle
-└── features/
-    ├── blog-medico/          # Artículos, tarjetas, servicios y tipos
-    ├── catalogo-servicios/   # Procedimientos quirúrgicos y fichas
-    ├── citas/                # Modal de agendamiento
-    └── perfil-medico/        # HeroSection, Perfil, Testimonios
+├── app/                        # Rutas. Cada page.tsx: pide datos, arma metadatos y compone secciones
+│   ├── [...ruta]/              # URLs antiguas → redirecciones 301 configuradas en el CMS
+│   ├── api/revalidate/         # La API avisa aquí cuando cambia algo en el CMS
+│   ├── blog/  procedimientos/  dr-juan-carlos-marcos/  contacto/  privacidad/ …
+│   ├── layout.tsx  globals.css  sitemap.ts  robots.ts
+├── components/                 # Piezas compartidas por varias funcionalidades
+│   ├── layout/                 # BarraNavegacion, PiePagina, WhatsappFlotante
+│   ├── legal/                  # PaginaLegalVista (privacidad, términos, consentimiento)
+│   ├── providers/              # MarcoSitio (estructura + modal de cita), SitioContext (datos globales)
+│   └── ui/                     # BotonCita, Modal, Formulario, MigasDePan, TituloSeccion, BotonWhatsapp
+├── features/                   # Una carpeta por funcionalidad, con sus componentes y tipos
+│   ├── inicio/                 # Secciones de la portada
+│   ├── procedimientos/         # Encabezado, contenido, cierre y datos estructurados de cada procedimiento
+│   ├── blog/                   # Listado, tarjeta y detalle de artículos
+│   ├── medico/                 # Perfil del doctor
+│   ├── testimonios/            # Sección de testimonios y formulario «Deja tu opinión»
+│   └── citas/                  # Modal de reserva con turnos libres
+├── lib/
+│   ├── cms.ts                  # Lecturas de la API en el servidor (con caché y revalidación)
+│   ├── cms-tipos.ts            # Tipos de lo que devuelve la API
+│   ├── api-cliente.ts          # Envíos desde el navegador (citas, opiniones) y mensajes de error
+│   ├── sitio.ts                # Datos derivados de la configuración (foto, WhatsApp, horarios)
+│   ├── seo.ts                  # Metadatos y Schema.org
+│   ├── formato.ts              # Teléfonos, enlaces y fechas
+│   └── redirecciones.ts
+└── config/api.ts               # URL de la API (NEXT_PUBLIC_API_URL)
 ```
+
+**Reglas:**
+- `app/` no contiene diseño largo: compone componentes de `features/`.
+- Una funcionalidad puede usar `components/` y `lib/`, pero no componentes de otra funcionalidad
+  (salvo secciones pensadas para reutilizarse, como `SeccionTestimonios`).
+- Nada del doctor va fijo en el código: nombre, foto, teléfonos y textos vienen del CMS.
+- Los componentes de cliente reciben solo los datos que necesitan (por ejemplo, el listado del blog
+  recibe el resumen de cada artículo, no su contenido).
 
 ---
 

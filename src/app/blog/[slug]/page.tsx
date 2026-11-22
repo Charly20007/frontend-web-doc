@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ArticleDetailClient } from '../../../features/blog-medico/components/ArticleDetailClient';
-import { construirMetadata, urlAbsoluta } from '../../../config/site';
+import { DetalleArticulo } from '../../../features/blog/components/DetalleArticulo';
+import { construirMetadata, urlAbsoluta } from '../../../lib/seo';
 import { getArticulo, getArticulos, getConfiguracion } from '../../../lib/cms';
 import { redirigirSiCorresponde } from '../../../lib/redirecciones';
 
@@ -59,7 +59,7 @@ export default async function ArticlePage({ params }: PageProps) {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <ArticleDetailClient articulo={articulo} />
+      <DetalleArticulo articulo={articulo} config={config} />
     </>
   );
 }

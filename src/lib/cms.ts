@@ -1,6 +1,7 @@
 import { API_URL } from '../config/api';
 import type { ConfiguracionSitio, PaginaLegal, PaginaLegalResumen, PaginaSeo, Redireccion, Servicio, ServicioDetalle, Testimonio } from './cms-tipos';
-import type { ArticuloMedico } from '../features/blog-medico/types';
+import type { ArticuloMedico } from '../features/blog/tipos';
+import { formatearFecha } from './formato';
 
 /**
  * Acceso a la API desde el servidor de Next.
@@ -19,7 +20,7 @@ async function apiGet<T>(ruta: string): Promise<T | null> {
 
 export async function getConfiguracion(): Promise<ConfiguracionSitio> {
   const config = await apiGet<ConfiguracionSitio>('/api/configuracion');
-  if (!config) throw new Error('La configuración del sitio no existe en la base de datos (ejecute 03_Fase1_SEO.sql).');
+  if (!config) throw new Error('La configuración del sitio no existe en la base de datos (revise que la API haya aplicado las migraciones y cargado los datos iniciales).');
   return { ...config, siteUrl: config.siteUrl.replace(/\/$/, '') };
 }
 
@@ -39,15 +40,6 @@ export const getPaginasLegales = async () => (await apiGet<PaginaLegalResumen[]>
 export const getPaginaLegal = (clave: string) => apiGet<PaginaLegal>(`/api/paginas-legales/${clave}`);
 
 export const getRedirecciones = async () => (await apiGet<Redireccion[]>('/api/seo/redirecciones')) ?? [];
-
-/** "2026-07-02T00:00:00" → "02 de Julio, 2026" */
-export function formatearFecha(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d
-    .toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' })
-    .replace(/ de (\p{L}+) de (\d{4})/u, (_, mes: string, anio: string) => ` de ${mes[0].toUpperCase()}${mes.slice(1)}, ${anio}`);
-}
 
 type ArticuloApi = Omit<ArticuloMedico, 'fechaPublicacionTexto'>;
 const normalizarArticulo = (a: ArticuloApi): ArticuloMedico => ({ ...a, fechaPublicacionTexto: formatearFecha(a.fechaPublicacion) });

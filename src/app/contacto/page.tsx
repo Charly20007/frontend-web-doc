@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { MapPin, Phone, Mail, Clock, AlertTriangle } from 'lucide-react';
-import { Breadcrumbs } from '../../components/ui/Breadcrumbs';
-import { BookingButton } from '../../components/ui/BookingButton';
-import { formatearTelefono, numeroWhatsapp, agruparHorarios, construirMetadata, direccionCompleta, physicianJsonLd, telHref, whatsappHref } from '../../config/site';
+import { MigasDePan } from '../../components/ui/MigasDePan';
+import { BotonCita } from '../../components/ui/BotonCita';
+import { formatearTelefono, telHref, whatsappHref } from '../../lib/formato';
+import { construirMetadata, physicianJsonLd } from '../../lib/seo';
+import { numeroWhatsapp, agruparHorarios, direccionCompleta } from '../../lib/sitio';
 import { getConfiguracion, getPaginaSeo } from '../../lib/cms';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,23 +29,23 @@ export default async function ContactoPage() {
 
       <section className="py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Breadcrumbs siteUrl={config.siteUrl} items={[{ nombre: 'Contacto', href: '/contacto' }]} />
-          <h1 className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <MigasDePan siteUrl={config.siteUrl} items={[{ nombre: 'Contacto', href: '/contacto' }]} />
+          <h1 className="mt-6 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900">
             Contacto y ubicación
           </h1>
-          <p className="mt-4 text-lg text-slate-600 dark:text-slate-300 max-w-3xl">
+          <p className="mt-4 text-lg text-slate-600 max-w-3xl">
             Agenda tu cita en línea, llámanos o visítanos en el consultorio en {config.distrito}.
           </p>
 
           <div className="mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="space-y-6">
               <div className="glass-card rounded-3xl p-7 space-y-5">
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white">Consultorio</h2>
-                <p className="flex items-start gap-3 text-slate-700 dark:text-slate-300">
+                <h2 className="text-xl font-bold text-slate-900">Consultorio</h2>
+                <p className="flex items-start gap-3 text-slate-700">
                   <MapPin className="w-5 h-5 shrink-0 text-medical-500 mt-0.5" />
                   <span>{direccion}</span>
                 </p>
-                <p className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+                <p className="flex items-center gap-3 text-slate-700">
                   <Phone className="w-5 h-5 shrink-0 text-medical-500" />
                   <span>
                     <a href={telHref(config.telefonoPrincipal)} className="font-semibold hover:underline">{formatearTelefono(config.telefonoPrincipal)}</a>
@@ -55,7 +57,7 @@ export default async function ContactoPage() {
                     )}
                   </span>
                 </p>
-                <p className="flex items-center gap-3 text-slate-700 dark:text-slate-300">
+                <p className="flex items-center gap-3 text-slate-700">
                   <Mail className="w-5 h-5 shrink-0 text-medical-500" />
                   <a href={`mailto:${config.correo}`} className="font-semibold hover:underline">{config.correo}</a>
                 </p>
@@ -65,21 +67,21 @@ export default async function ContactoPage() {
                   </a>
                 )}
                 {config.googleMapsUrl && (
-                  <a href={config.googleMapsUrl} target="_blank" rel="noopener noreferrer" className="block text-sm font-semibold text-medical-600 dark:text-medical-400 hover:underline">
+                  <a href={config.googleMapsUrl} target="_blank" rel="noopener noreferrer" className="block text-sm font-semibold text-medical-600 hover:underline">
                     Cómo llegar (Google Maps)
                   </a>
                 )}
               </div>
 
               <div className="glass-card rounded-3xl p-7">
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white">Horarios de atención</h2>
-                <dl className="mt-4 divide-y divide-slate-200 dark:divide-white/10 text-sm">
+                <h2 className="text-xl font-bold text-slate-900">Horarios de atención</h2>
+                <dl className="mt-4 divide-y divide-slate-200 text-sm">
                   {agruparHorarios(config).map((h) => (
                     <div key={h.dias} className="flex justify-between gap-4 py-2.5">
-                      <dt className="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+                      <dt className="flex items-center gap-2 text-slate-600">
                         <Clock className="w-4 h-4 text-medical-500" /> {h.dias}
                       </dt>
-                      <dd className="font-semibold text-slate-900 dark:text-white text-right">{h.horas}</dd>
+                      <dd className="font-semibold text-slate-900 text-right">{h.horas}</dd>
                     </div>
                   ))}
                 </dl>
@@ -91,10 +93,10 @@ export default async function ContactoPage() {
                 )}
               </div>
 
-              <BookingButton>Agendar cita en línea</BookingButton>
+              <BotonCita>Agendar cita en línea</BotonCita>
             </div>
 
-            <div className="rounded-3xl overflow-hidden border border-slate-200 dark:border-white/10 min-h-[360px]">
+            <div className="rounded-3xl overflow-hidden border border-slate-200 min-h-[360px]">
               <iframe
                 title={`Mapa del consultorio en ${config.distrito ?? ''}`}
                 src={mapaUrl}

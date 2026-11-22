@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
-import { BlogList } from '../../features/blog-medico/components/BlogList';
-import { construirMetadata } from '../../config/site';
+import { ListaArticulos } from '../../features/blog/components/ListaArticulos';
+import { construirMetadata } from '../../lib/seo';
 import { getArticulos, getConfiguracion, getPaginaSeo } from '../../lib/cms';
+import { aResumen } from '../../features/blog/tipos';
 
 export async function generateMetadata(): Promise<Metadata> {
   const [config, pagina] = await Promise.all([getConfiguracion(), getPaginaSeo('blog')]);
@@ -15,5 +16,6 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function BlogPage() {
-  return <BlogList articulos={await getArticulos()} />;
+  // Solo el resumen: el listado es interactivo (búsqueda) y no necesita el texto completo
+  return <ListaArticulos articulos={(await getArticulos()).map(aResumen)} />;
 }

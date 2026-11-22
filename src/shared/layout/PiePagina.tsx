@@ -7,6 +7,9 @@ import { formatearTelefono, telHref, whatsappHref } from '../../lib/formato';
 import { numeroWhatsapp, agruparHorarios, direccionCompleta } from '../../lib/sitio';
 import { useSitio } from '../providers/SitioContext';
 
+/** Procedimientos que se muestran en el pie (los primeros según «Orden en la web»). */
+const EN_PIE = 6;
+
 export const PiePagina: React.FC = () => {
   const { config, servicios, legales } = useSitio();
   const redes = [
@@ -96,11 +99,14 @@ export const PiePagina: React.FC = () => {
           <div className="space-y-4">
             <h4 className="font-bold text-white uppercase text-xs tracking-wider">Especialidades Quirúrgicas</h4>
             <ul className="space-y-2 text-xs">
-              {servicios.map((p) => (
+              {[...servicios].sort((a, b) => a.orden - b.orden).slice(0, EN_PIE).map((p) => (
                 <li key={p.slug}>
-                  <Link href={`/procedimientos/${p.slug}`} className="hover:text-medical-400 transition-colors">{p.nombre}</Link>
+                  <Link href={`/procedimientos/${p.slug}`} className="hover:text-medical-400 transition-colors">{p.nombreCorto || p.nombre}</Link>
                 </li>
               ))}
+              <li className="pt-1">
+                <Link href="/procedimientos" className="font-semibold text-medical-400 hover:text-medical-300 transition-colors">Ver todos los procedimientos →</Link>
+              </li>
             </ul>
           </div>
 

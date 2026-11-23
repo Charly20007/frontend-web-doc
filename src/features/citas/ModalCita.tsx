@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useState } from 'react';
-import { Calendar, User, Mail, Phone } from 'lucide-react';
+import { Building2, Calendar, Stethoscope, User, Mail, Phone } from 'lucide-react';
 import { apiCliente, codigoDeError, mensajeDeError } from '../../lib/api-cliente';
 import { Modal } from '../../shared/ui/Modal';
 import { AlertaError, PantallaExito, claseBotonPrincipal, claseBotonSecundario, claseEtiqueta, claseInput } from '../../shared/ui/Formulario';
@@ -10,6 +10,7 @@ import { formatearTelefono, telHref } from '../../lib/formato';
 import { useSitio } from '../../shared/providers/SitioContext';
 import { SelectorTurno } from './SelectorTurno';
 import { partesFecha, type Disponibilidad } from './fechas';
+import { clinicaDeReserva, ReservaClinica } from './ReservaClinica';
 
 interface ModalCitaProps {
   abierto: boolean;
@@ -34,6 +35,8 @@ export const ModalCita: React.FC<ModalCitaProps> = ({ abierto, alCerrar, servici
   const [correo, setCorreo] = useState('');
   const [motivo, setMotivo] = useState('');
   const [aceptaPrivacidad, setAceptaPrivacidad] = useState(false);
+  const clinica = clinicaDeReserva(config);
+  const [lugar, setLugar] = useState<'consultorio' | 'clinica'>('consultorio');
 
   const [agenda, setAgenda] = useState<Disponibilidad | null>(null);
   const [cargandoAgenda, setCargandoAgenda] = useState(false);
@@ -109,6 +112,7 @@ export const ModalCita: React.FC<ModalCitaProps> = ({ abierto, alCerrar, servici
     setMotivo('');
     setHora(null);
     setAceptaPrivacidad(false);
+    setLugar('consultorio');
     alCerrar();
   };
 
@@ -126,88 +130,123 @@ export const ModalCita: React.FC<ModalCitaProps> = ({ abierto, alCerrar, servici
           </p>
         </PantallaExito>
       ) : (
-        <form onSubmit={enviar} className="space-y-6">
-          {error && <AlertaError mensaje={error} />}
-
-          {/* 1. Motivo de la consulta */}
-          <div>
-            <label htmlFor="cita-servicio" className={claseEtiqueta}>¿Sobre qué quieres consultar?</label>
-            <select id="cita-servicio" value={idServicio} onChange={(e) => setIdServicio(Number(e.target.value))} className={claseInput}>
-              {servicios.map((s) => (
-                <option key={s.id} value={s.id}>{s.nombre}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* 2. Turno */}
-          <SelectorTurno
-            agenda={agenda}
-            cargando={cargandoAgenda}
-            error={errorAgenda}
-            fecha={fecha}
-            hora={hora}
-            telefono={config.telefonoPrincipal}
-            alElegirFecha={(f) => { setFecha(f); setHora(null); }}
-            alElegirHora={setHora}
-            alReintentar={() => void cargarAgenda()}
-          />
-
-          {/* 3. Datos del paciente */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="space-y-6">
+          {clinica && (
             <div>
-              <label htmlFor="cita-nombres" className={claseEtiqueta}>Nombres *</label>
-              <div className="relative">
-                <User className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                <input id="cita-nombres" type="text" required maxLength={100} placeholder="Ej. Carlos Eduardo" value={nombres} onChange={(e) => setNombres(e.target.value)} className={`${claseInput} pl-10`} />
+              <p className={claseEtiqueta}>¿Dónde quieres atenderte?</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" role="radiogroup" aria-label="Lugar de atención">
+                {([
+                  ['consultorio', 'Consultorio particular', 'Elige un turno aquí mismo.', <Stethoscope key="c" className="w-5 h-5" />],
+                  ['clinica', clinica.nombre, 'Reserva en la web de la clínica.', <Building2 key="k" className="w-5 h-5" />],
+                ] as const).map(([valor, titulo, desc, icono]) => (
+                  <button
+                    key={valor}
+                    type="button"
+                    role="radio"
+                    aria-checked={lugar === valor}
+                    onClick={() => setLugar(valor)}
+                    className={`flex items-start gap-3 p-4 rounded-2xl border text-left transition-colors cursor-pointer ${
+                      lugar === valor ? 'border-medical-500 bg-medical-50 ring-2 ring-medical-500/20' : 'border-slate-200 hover:border-medical-300'
+                    }`}
+                  >
+                    <span className={`w-9 h-9 shrink-0 rounded-xl flex items-center justify-center ${lugar === valor ? 'bg-medical-600 text-white' : 'bg-slate-100 text-slate-500'}`}>{icono}</span>
+                    <span>
+                      <span className="block font-bold text-navy-900">{titulo}</span>
+                      <span className="block text-sm text-slate-500">{desc}</span>
+                    </span>
+                  </button>
+                ))}
               </div>
             </div>
-            <div>
-              <label htmlFor="cita-apellidos" className={claseEtiqueta}>Apellidos *</label>
-              <input id="cita-apellidos" type="text" required maxLength={100} placeholder="Ej. Mendoza Silva" value={apellidos} onChange={(e) => setApellidos(e.target.value)} className={claseInput} />
-            </div>
-            <div>
-              <label htmlFor="cita-telefono" className={claseEtiqueta}>Teléfono / WhatsApp *</label>
-              <div className="relative">
-                <Phone className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                <input id="cita-telefono" type="tel" required placeholder="+51 987 654 321" value={telefono} onChange={(e) => setTelefono(e.target.value)} className={`${claseInput} pl-10`} />
+          )}
+
+          {clinica && lugar === 'clinica' ? (
+            <ReservaClinica clinica={clinica} />
+          ) : (
+            <form onSubmit={enviar} className="space-y-6">
+              {error && <AlertaError mensaje={error} />}
+
+              {/* 1. Motivo de la consulta */}
+              <div>
+                <label htmlFor="cita-servicio" className={claseEtiqueta}>¿Sobre qué quieres consultar?</label>
+                <select id="cita-servicio" value={idServicio} onChange={(e) => setIdServicio(Number(e.target.value))} className={claseInput}>
+                  {servicios.map((s) => (
+                    <option key={s.id} value={s.id}>{s.nombre}</option>
+                  ))}
+                </select>
               </div>
-            </div>
-            <div>
-              <label htmlFor="cita-correo" className={claseEtiqueta}>Correo electrónico *</label>
-              <div className="relative">
-                <Mail className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                <input id="cita-correo" type="email" required maxLength={100} placeholder="paciente@correo.com" value={correo} onChange={(e) => setCorreo(e.target.value)} className={`${claseInput} pl-10`} />
+
+              {/* 2. Turno */}
+              <SelectorTurno
+                agenda={agenda}
+                cargando={cargandoAgenda}
+                error={errorAgenda}
+                fecha={fecha}
+                hora={hora}
+                telefono={config.telefonoPrincipal}
+                alElegirFecha={(f) => { setFecha(f); setHora(null); }}
+                alElegirHora={setHora}
+                alReintentar={() => void cargarAgenda()}
+              />
+
+              {/* 3. Datos del paciente */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="cita-nombres" className={claseEtiqueta}>Nombres *</label>
+                  <div className="relative">
+                    <User className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
+                    <input id="cita-nombres" type="text" required maxLength={100} placeholder="Ej. Carlos Eduardo" value={nombres} onChange={(e) => setNombres(e.target.value)} className={`${claseInput} pl-10`} />
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="cita-apellidos" className={claseEtiqueta}>Apellidos *</label>
+                  <input id="cita-apellidos" type="text" required maxLength={100} placeholder="Ej. Mendoza Silva" value={apellidos} onChange={(e) => setApellidos(e.target.value)} className={claseInput} />
+                </div>
+                <div>
+                  <label htmlFor="cita-telefono" className={claseEtiqueta}>Teléfono / WhatsApp *</label>
+                  <div className="relative">
+                    <Phone className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
+                    <input id="cita-telefono" type="tel" required placeholder="+51 987 654 321" value={telefono} onChange={(e) => setTelefono(e.target.value)} className={`${claseInput} pl-10`} />
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="cita-correo" className={claseEtiqueta}>Correo electrónico *</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
+                    <input id="cita-correo" type="email" required maxLength={100} placeholder="paciente@correo.com" value={correo} onChange={(e) => setCorreo(e.target.value)} className={`${claseInput} pl-10`} />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          <div>
-            <label htmlFor="cita-motivo" className={claseEtiqueta}>Síntomas u observaciones</label>
-            <textarea id="cita-motivo" rows={2} maxLength={500} placeholder="Ej. Dolor luego de comer, tengo una ecografía…" value={motivo} onChange={(e) => setMotivo(e.target.value)} className={claseInput} />
-          </div>
+              <div>
+                <label htmlFor="cita-motivo" className={claseEtiqueta}>Síntomas u observaciones</label>
+                <textarea id="cita-motivo" rows={2} maxLength={500} placeholder="Ej. Dolor luego de comer, tengo una ecografía…" value={motivo} onChange={(e) => setMotivo(e.target.value)} className={claseInput} />
+              </div>
 
-          {/* Consentimiento para el tratamiento de datos (Ley N.° 29733) */}
-          <label className="flex items-start gap-3 text-sm text-slate-600 cursor-pointer">
-            <input type="checkbox" required checked={aceptaPrivacidad} onChange={(e) => setAceptaPrivacidad(e.target.checked)} className="mt-0.5 w-4 h-4 accent-medical-600 shrink-0" />
-            <span>
-              Acepto que mis datos se usen para gestionar mi cita, según la{' '}
-              <a href="/privacidad" target="_blank" rel="noopener" className="font-semibold text-medical-700 underline">política de privacidad</a>.
-            </span>
-          </label>
+              {/* Consentimiento para el tratamiento de datos (Ley N.° 29733) */}
+              <label className="flex items-start gap-3 text-sm text-slate-600 cursor-pointer">
+                <input type="checkbox" required checked={aceptaPrivacidad} onChange={(e) => setAceptaPrivacidad(e.target.checked)} className="mt-0.5 w-4 h-4 accent-medical-600 shrink-0" />
+                <span>
+                  Acepto que mis datos se usen para gestionar mi cita, según la{' '}
+                  <a href="/privacidad" target="_blank" rel="noopener" className="font-semibold text-medical-700 underline">política de privacidad</a>.
+                </span>
+              </label>
 
-          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-3 pt-4 border-t border-slate-200">
-            <button type="button" onClick={cerrar} className={claseBotonSecundario}>
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              disabled={enviando || !hora || !agenda?.reservasActivas}
-              className={claseBotonPrincipal}
-            >
-              {enviando ? 'Reservando…' : hora && fecha ? `Reservar ${partesFecha(fecha).dia} ${partesFecha(fecha).numero} · ${hora}` : 'Elige un horario'}
-            </button>
-          </div>
-        </form>
+              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-3 pt-4 border-t border-slate-200">
+                <button type="button" onClick={cerrar} className={claseBotonSecundario}>
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={enviando || !hora || !agenda?.reservasActivas}
+                  className={claseBotonPrincipal}
+                >
+                  {enviando ? 'Reservando…' : hora && fecha ? `Reservar ${partesFecha(fecha).dia} ${partesFecha(fecha).numero} · ${hora}` : 'Elige un horario'}
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
       )}
     </Modal>
   );

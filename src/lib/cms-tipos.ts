@@ -45,6 +45,12 @@ export interface ConfiguracionSitio {
   descripcionPie?: string | null;
   mostrarEmergencias: boolean;
   textoEmergencias?: string | null;
+  /** Reserva en una clínica externa (ej.: SANNA), además del consultorio. */
+  reservaClinicaActiva?: boolean;
+  reservaClinicaNombre?: string | null;
+  reservaClinicaUrl?: string | null;
+  reservaClinicaTelefono?: string | null;
+  reservaClinicaTextoBusqueda?: string | null;
   horarios: Horario[];
 }
 

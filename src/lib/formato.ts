@@ -17,6 +17,16 @@ export function formatearTelefono(telefono?: string | null): string {
   return telefono;
 }
 
+/**
+ * Enlace a la web de una clínica que, al abrirse, baja hasta el nombre del doctor y lo resalta
+ * (fragmento de texto «#:~:text=»; los navegadores que no lo entienden simplemente abren la página).
+ */
+export const enlaceClinica = (url: string, texto?: string | null) => {
+  const limpio = url.trim();
+  if (!texto?.trim() || limpio.includes('#')) return limpio;
+  return `${limpio}#:~:text=${encodeURIComponent(texto.trim())}`;
+};
+
 /** "+51 987 654 321" → "https://wa.me/51987654321" */
 export const whatsappHref = (telefono?: string | null) => (telefono ? `https://wa.me/${telefono.replace(/\D/g, '')}` : undefined);
 
